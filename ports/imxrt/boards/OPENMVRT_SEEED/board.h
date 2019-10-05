@@ -280,7 +280,7 @@
 /**
  * @brief	The board name 
  */
-#define BOARD_NAME "board"
+//#define BOARD_NAME "board"
 
 #if defined(__cplusplus)
 extern "C" {

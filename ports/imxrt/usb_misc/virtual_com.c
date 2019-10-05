@@ -53,7 +53,12 @@
 /*******************************************************************************
 * Definitions
 ******************************************************************************/
+#ifndef   __WEAK
+  #define __WEAK                                 __attribute__((weak))
+#endif
+
 #define USB_DATA_ALIGNMENT
+
 /*******************************************************************************
 * Variables
 ******************************************************************************/
@@ -668,7 +673,9 @@ bool VCOM_IsTxIdle(void) {
 	return s_isTxIdle ? 1 : 0;
 }
 
-extern volatile uint8_t g_omvIdeConnecting;
+//TODO Dave Implement Properly...:
+//extern volatile uint8_t g_omvIdeConnecting;
+volatile uint8_t g_omvIdeConnecting = 0;
 
 bool VCOM_OmvIsIdeConnecting(void) {
 	return g_omvIdeConnecting;

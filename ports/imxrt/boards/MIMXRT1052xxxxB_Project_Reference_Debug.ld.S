@@ -354,7 +354,13 @@ SECTIONS
 
   } >BOARD_SDRAM
 
-
+  /*TODO Dave: Define proper variables... & Memomap*/
   _estack     = __top_SRAM_DTC;
   _ram_end    = __top_SRAM_DTC;
+  _sidata = __base_BOARD_FLASH;
+  _sdata = __base_BOARD_SDRAM;
+  _sbss = __base_SRAM_DTC;
+  _ram_start = __base_SRAM_DTC;
+  _heap_start = __base_SRAM_DTC;
+  _heap_end = __base_SRAM_DTC;
 }

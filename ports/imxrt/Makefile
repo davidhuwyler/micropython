@@ -58,7 +58,10 @@ INC += -I$(HAL_DIR)/usb/include
 INC += -I$(HAL_DIR)/usb/device/include
 INC += -I$(HAL_DIR)/usb/device/class
 INC += -I$(HAL_DIR)/usb/device/source
+INC += -I$(HAL_DIR)/usb/device/source/ehci
+INC += -I$(HAL_DIR)/usb/device/source/khci
 INC += -I$(HAL_DIR)/osa
+INC += -I$(HAL_DIR)/sdmmc
 INC += -Iflegftl
 
 # Options for particular MCU series
@@ -96,7 +99,6 @@ SRC_LIB = $(addprefix lib/,\
 	utils/interrupt_char.c \
 	utils/sys_stdio_mphal.c \
 	utils/printf.c \
-	utils/stdout_helpers.c \
 	)
 
 ifeq ($(MICROPY_FLOAT_IMPL),double)
@@ -189,16 +191,26 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 SRC_C = \
 	irq.c \
 	isr.c \
+	fatfs_port.c \
 	hal_wrapper.c \
 	pin.c \
 	pin_defs_mcu.c \
 	pin_named_pins.c \
 	mphalport.c \
+	modmachine.c \
+	rpm.c \
+	srpm.c \
+	tmr.c \
 	systick.c \
 	storage.c \
 	gccollect.c \
+	led.c \
+	flegftl/flegftl.c \
 	help.c \
+	uart.c \
+	pendsv.c \
 	usb_app.c \
+	uniqueID.c \
 	bufhelper.c \
 	usbd_msc_storage.c \
 	$(STARTUP_FILE) \
@@ -228,6 +240,13 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_lpi2c.c \
 	)
 	
+SRC_HAL += $(addprefix $(HAL_DIR)/, \
+	usb/device/source/usb_device_dci.c \
+	usb/device/source/ehci/usb_device_ehci.c \
+	usb/device/class/usb_device_cdc_acm.c \
+	osa/usb_osa_bm.c \
+	)
+	
 SRC_SYS = $(addprefix $(HAL_DIR)/, \
 	system_MIMXRT1052.c \
 	)
@@ -242,6 +261,8 @@ SRC_USBDEV = $(addprefix $(USBDEV_DIR)/,\
 	composite.c \
 	ring_buffer.c \
 	virtual_com.c \
+	usb_device_descriptor.c \
+	usb_device_msc.c \
 	)
 
 ifneq ($(MICROPY_PY_WIZNET5K),0)
@@ -421,10 +442,11 @@ GEN_STMCONST_MPZ = $(HEADER_BUILD)/modstm_mpz.h
 CMSIS_MCU_UPPER = $(shell echo $(CMSIS_MCU) | tr '[:lower:]' '[:upper:]')
 CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_UPPER).h
 
-modmachine.c: $(GEN_PLLFREQTABLE_HDR)
-$(GEN_PLLFREQTABLE_HDR): $(PLLVALUES) | $(HEADER_BUILD)
-	$(ECHO) "GEN $@"
-	$(Q)$(PYTHON) $(PLLVALUES) -c file:boards/$(BOARD)/stm32$(MCU_SERIES)xx_hal_conf.h > $@
+#TODO Dave: PLL Table build nessessary?
+#modmachine.c: $(GEN_PLLFREQTABLE_HDR)
+#$(GEN_PLLFREQTABLE_HDR): $(PLLVALUES) | $(HEADER_BUILD)
+#	$(ECHO) "GEN $@"
+#	$(Q)$(PYTHON) $(PLLVALUES) -c file:boards/$(BOARD)/stm32$(MCU_SERIES)xx_hal_conf.h > $@
 
 $(BUILD)/modstm.o: $(GEN_STMCONST_HDR)
 # Use a pattern rule here so that make will only call make-stmconst.py once to

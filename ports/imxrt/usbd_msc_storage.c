@@ -67,6 +67,7 @@
 #define usb_echo(...) mp_printf(MP_PYTHON_PRINTER, __VA_ARGS__)
 
 #define USB_DATA_ALIGNMENT
+
 /*******************************************************************************
 * Variables
 ******************************************************************************/
@@ -121,12 +122,9 @@ uint32_t g_mscWriteRequestBuffer[USB_DEVICE_MSC_WRITE_BUFF_SIZE >> 2];
 uint8_t s_isUseSDCard;
 void _ConfigLBA(usb_device_lba_information_struct_t *lbaInf)
 {
-	//TODO Is this fine to leave out?:
-#if 0
 	if (sdcard_is_present()) 
 	{
 		s_isUseSDCard = 1; //1;
-
 		lbaInf->totalLbaNumberSupports = sdcard_get_lba_count();
 	}
 	else
@@ -135,7 +133,6 @@ void _ConfigLBA(usb_device_lba_information_struct_t *lbaInf)
 	lbaInf->lengthOfEachLba = 512;
 	lbaInf->bulkInBufferSize = sizeof(g_mscReadRequestBuffer);
 	lbaInf->bulkOutBufferSize = sizeof(g_mscWriteRequestBuffer);
-#endif
 	lbaInf->logicalUnitNumberSupported = LOGICAL_UNIT_SUPPORTED;
 }
 
@@ -207,14 +204,12 @@ usb_status_t USB_DeviceMscCallback2(class_handle_t handle, uint32_t event, void 
         case kUSB_DeviceMscEventInquiry:
             ufi = (usb_device_ufi_app_struct_t *)param;
             ufi->size = sizeof(usb_device_inquiry_data_fromat_struct_t);
-            //TODO fine to leave out?:
-            //ufi->buffer = (uint8_t *)&g_InquiryInfo;
+            ufi->buffer = (uint8_t *)&g_InquiryInfo;
             break;
         case kUSB_DeviceMscEventModeSense:
             ufi = (usb_device_ufi_app_struct_t *)param;
             ufi->size = sizeof(usb_device_mode_parameters_header_struct_t);
-            //TODO fine to leave out?:
-            //ufi->buffer = (uint8_t *)&g_ModeParametersHeader;
+            ufi->buffer = (uint8_t *)&g_ModeParametersHeader;
             break;
         case kUSB_DeviceMscEventModeSelect:
             break;
@@ -341,14 +336,12 @@ usb_status_t USB_DeviceMscCallback(class_handle_t handle, uint32_t event, void *
         case kUSB_DeviceMscEventInquiry:
             ufi = (usb_device_ufi_app_struct_t *)param;
             ufi->size = sizeof(usb_device_inquiry_data_fromat_struct_t);
-            //TODO fine to leave out?:
-            //ufi->buffer = (uint8_t *)&g_InquiryInfo;
+            ufi->buffer = (uint8_t *)&g_InquiryInfo;
             break;
         case kUSB_DeviceMscEventModeSense:
             ufi = (usb_device_ufi_app_struct_t *)param;
             ufi->size = sizeof(usb_device_mode_parameters_header_struct_t);
-            //TODO fine to leave out?:
-            //ufi->buffer = (uint8_t *)&g_ModeParametersHeader;
+            ufi->buffer = (uint8_t *)&g_ModeParametersHeader;
             break;
         case kUSB_DeviceMscEventModeSelect:
             break;

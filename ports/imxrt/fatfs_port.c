@@ -1,9 +1,9 @@
 /*
- * This file is part of the Micro Python project, http://micropython.org/
+ * This file is part of the MicroPython project, http://micropython.org/
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Damien P. George
+ * Copyright (c) 2013, 2014 Damien P. George
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,19 @@
  * THE SOFTWARE.
  */
 
-#ifndef __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
-#define __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+#include "py/runtime.h"
+#include "lib/oofatfs/ff.h"
+#include "rtc.h"
 
-// these are exports for the CDC/MSC/HID interface that are independent
-// from any other definitions/declarations
-
-#endif // __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+DWORD get_fattime(void) {
+    #if 0
+    rtc_init_finalise();
+    RTC_TimeTypeDef time;
+    RTC_DateTypeDef date;
+    HAL_RTC_GetTime(&RTCHandle, &time, FORMAT_BIN);
+    HAL_RTC_GetDate(&RTCHandle, &date, FORMAT_BIN);
+    return ((2000 + date.Year - 1980) << 25) | ((date.Month) << 21) | ((date.Date) << 16) | ((time.Hours) << 11) | ((time.Minutes) << 5) | (time.Seconds / 2);
+    #else
+    return ((2000 - 1980 + 17) << 25) | (8) << 21 | ((15) << 16) | ((23) << 11) | ((34) << 5) | (45 / 2);
+    #endif
+}

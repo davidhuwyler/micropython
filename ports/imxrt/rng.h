@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Damien P. George
+ * Copyright (c) 2013, 2014 Damien P. George
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,7 @@
  * THE SOFTWARE.
  */
 
-#ifndef __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
-#define __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
-
-// these are exports for the CDC/MSC/HID interface that are independent
-// from any other definitions/declarations
-
-#endif // __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+#include "py/obj.h"
+uint32_t rng_get(void);
+extern const mp_obj_type_t pyb_rng_type;
+MP_DECLARE_CONST_FUN_OBJ_0(pyb_rng_getnum_obj);

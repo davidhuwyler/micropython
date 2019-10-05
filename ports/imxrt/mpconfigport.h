@@ -189,6 +189,9 @@ extern const struct _mp_obj_module_t gif_module;
 #define NETWORK_BUILTIN_MODULE
 #endif
 
+//TODO Dave: Define the modules for the seeed studio board
+//#define OMVRT_PORT_ONGONING
+
 #if defined(OMV_MPY_ONLY)
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
@@ -213,6 +216,9 @@ extern const struct _mp_obj_module_t gif_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \*/
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
+#elif defined(OMVRT_PORT_ONGONING)
+#define MICROPY_PORT_BUILTIN_MODULES \
+{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module },
 #else
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
@@ -256,6 +262,20 @@ extern const struct _mp_obj_module_t gif_module;
     { MP_OBJ_NEW_QSTR(MP_QSTR_machine), (mp_obj_t)&machine_module }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
+
+	// extra constants
+#if defined(OMVRT_PORT_ONGONING)
+#define MICROPY_PORT_CONSTANTS \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module },
+#else
+#define MICROPY_PORT_CONSTANTS \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_machine), (mp_obj_t)&machine_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module },
+#endif
+
+
 
 #define MICROPY_HW_MAX_UART (10)
 

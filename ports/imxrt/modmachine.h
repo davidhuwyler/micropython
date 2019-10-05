@@ -1,9 +1,9 @@
 /*
- * This file is part of the Micro Python project, http://micropython.org/
+ * This file is part of the MicroPython project, http://micropython.org/
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Damien P. George
+ * Copyright (c) 2013-2015 Damien P. George
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,21 @@
  * THE SOFTWARE.
  */
 
-#ifndef __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
-#define __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+#ifndef __MICROPY_INCLUDED_STMHAL_MODMACHINE_H__
+#define __MICROPY_INCLUDED_STMHAL_MODMACHINE_H__
 
-// these are exports for the CDC/MSC/HID interface that are independent
-// from any other definitions/declarations
+#include "py/mpstate.h"
+#include "py/nlr.h"
+#include "py/obj.h"
 
-#endif // __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+void machine_init(void);
+
+MP_DECLARE_CONST_FUN_OBJ_VAR_BETWEEN(machine_info_obj);
+MP_DECLARE_CONST_FUN_OBJ_0(machine_unique_id_obj);
+MP_DECLARE_CONST_FUN_OBJ_0(machine_reset_obj);
+MP_DECLARE_CONST_FUN_OBJ_0(machine_bootloader_obj);
+MP_DECLARE_CONST_FUN_OBJ_VAR_BETWEEN(machine_freq_obj);
+MP_DECLARE_CONST_FUN_OBJ_0(machine_sleep_obj);
+MP_DECLARE_CONST_FUN_OBJ_0(machine_deepsleep_obj);
+
+#endif // __MICROPY_INCLUDED_STMHAL_MODMACHINE_H__

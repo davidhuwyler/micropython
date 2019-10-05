@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Damien P. George
+ * Copyright (c) 2013, 2014 Damien P. George
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include "obj.h"
+#include "mpconfigboard.h"
+extern const mp_obj_module_t pyb_module;
+extern const mp_obj_module_t stm_module;
+extern const mp_obj_module_t mp_module_uos;
+extern const mp_obj_module_t mp_module_utime;
+extern const mp_obj_module_t mp_module_usocket;
 
-#ifndef __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
-#define __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+// additional helper functions exported by the modules
 
-// these are exports for the CDC/MSC/HID interface that are independent
-// from any other definitions/declarations
+MP_DECLARE_CONST_FUN_OBJ_1(time_sleep_ms_obj);
+MP_DECLARE_CONST_FUN_OBJ_1(time_sleep_us_obj);
 
-#endif // __MICROPY_INCLUDED_STMHAL_USB_CDC_MSC_HID0_H__
+MP_DECLARE_CONST_FUN_OBJ_0(mod_os_sync_obj);
+MP_DECLARE_CONST_FUN_OBJ_VAR_BETWEEN(mod_os_dupterm_obj);
