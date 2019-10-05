@@ -6,9 +6,15 @@
  * Generated linker script file for MIMXRT1052xxxxB
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.0.0 [Build 2516] [2019-06-05] on Oct 3, 2019 2:31:03 PM
- * "libcr_newlib_semihost.a"
+ * MCUXpresso IDE v11.0.0 [Build 2516] [2019-06-05] on Oct 4, 2019 3:32:48 PM
  */
+
+/*
+INCLUDE "MIMXRT1052xxxxB_Project_Test_Debug_library.ld"
+
+Removed:   "libcr_newlib_semihost.a"
+
+*/
 
 GROUP (
   "libgcc.a"
@@ -17,6 +23,9 @@ GROUP (
 )
 
 
+/*
+INCLUDE "MIMXRT1052xxxxB_Project_Test_Debug_memory.ld"
+*/
 MEMORY
 {
   /* Define each memory region */
@@ -48,6 +57,10 @@ MEMORY
   __base_RAM4 = 0x80000000 ; /* RAM4 */  
   __top_BOARD_SDRAM = 0x80000000 + 0x2000000 ; /* 32M bytes */  
   __top_RAM4 = 0x80000000 + 0x2000000 ; /* 32M bytes */  
+
+/*
+Rest:
+*/
 
 ENTRY(ResetISR)
 
@@ -326,4 +339,22 @@ SECTIONS
     _image_start = LOADADDR(.text);
     _image_end = LOADADDR(.data) + SIZEOF(.data);
     _image_size = _image_end - _image_start;
+
+
+  /*Custom Part for OpenMV:
+  /* Main framebuffer memory OMV_FB_SIZE +  OMV_FB_ALLOC_SIZE*/
+  .fb_memory (NOLOAD) :
+  {
+    . = ALIGN(4);
+    _fb_base = .;
+    . = . + 400k + 96k;
+
+    . = ALIGN(4);
+    _fballoc = .;
+
+  } >BOARD_SDRAM
+
+
+  _estack     = __top_SRAM_DTC;
+  _ram_end    = __top_SRAM_DTC;
 }

@@ -25,7 +25,7 @@ LD_DIR=boards
 CMSIS_DIR=$(TOP_DIR)/cmsis
 HAL_DIR=mcusdk
 MCU_SERIES_UPPER = $(shell echo $(MCU_SERIES) | tr '[:lower:]' '[:upper:]')
-#USBDEV_DIR=usbdev
+USBDEV_DIR=usb_misc
 #USBHOST_DIR=usbhost
 FATFS_DIR=lib/oofatfs
 DFU=$(TOP)/tools/dfu.py
@@ -44,15 +44,22 @@ CROSS_COMPILE = arm-none-eabi-
 INC += -I.
 INC += -I..
 INC += -I$(BUILD)
-#INC += -I$(USBDEV_DIR)/core/inc -I$(USBDEV_DIR)/class/inc
+INC += -I$(USBDEV_DIR)
 #INC += -I$(USBHOST_DIR)
 INC += -I$(HAL_DIR)
 INC += -I$(HAL_DIR)/drivers
 INC += -I$(HAL_DIR)/utilities
 INC += -I$(HAL_DIR)/CMSIS
 INC += -I$(HAL_DIR)/component/serial_manager
+INC += -I$(HAL_DIR)/component/serial_manager/usb_cdc_adapter
 INC += -I$(HAL_DIR)/component/uart
 INC += -I$(HAL_DIR)/usb/phy
+INC += -I$(HAL_DIR)/usb/include
+INC += -I$(HAL_DIR)/usb/device/include
+INC += -I$(HAL_DIR)/usb/device/class
+INC += -I$(HAL_DIR)/usb/device/source
+INC += -I$(HAL_DIR)/osa
+INC += -Iflegftl
 
 # Options for particular MCU series
 #CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DXIP_EXTERNAL_FLASH=1 -DXIP_BOOT_HEADER_ENABLE=1 -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -D__NEWLIB__ -O0 -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -D__NEWLIB__ -fstack-usage
@@ -88,6 +95,8 @@ SRC_LIB = $(addprefix lib/,\
 	utils/pyexec.c \
 	utils/interrupt_char.c \
 	utils/sys_stdio_mphal.c \
+	utils/printf.c \
+	utils/stdout_helpers.c \
 	)
 
 ifeq ($(MICROPY_FLOAT_IMPL),double)
@@ -178,16 +187,20 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 	)
 
 SRC_C = \
-	uart_core.c \
-	lib/utils/printf.c \
-	lib/utils/stdout_helpers.c \
-	lib/utils/pyexec.c \
-	lib/libc/string0.c \
-	lib/mp-readline/readline.c \
+	irq.c \
+	isr.c \
+	hal_wrapper.c \
 	pin.c \
 	pin_defs_mcu.c \
 	pin_named_pins.c \
+	mphalport.c \
 	systick.c \
+	storage.c \
+	gccollect.c \
+	help.c \
+	usb_app.c \
+	bufhelper.c \
+	usbd_msc_storage.c \
 	$(STARTUP_FILE) \
 	$(wildcard boards/$(BOARD)/*.c)
 
@@ -226,13 +239,9 @@ else
 endif
 
 SRC_USBDEV = $(addprefix $(USBDEV_DIR)/,\
-	core/src/usbd_core.c \
-	core/src/usbd_ctlreq.c \
-	core/src/usbd_ioreq.c \
-	class/src/usbd_cdc_msc_hid.c \
-	class/src/usbd_msc_bot.c \
-	class/src/usbd_msc_scsi.c \
-	class/src/usbd_msc_data.c \
+	composite.c \
+	ring_buffer.c \
+	virtual_com.c \
 	)
 
 ifneq ($(MICROPY_PY_WIZNET5K),0)
@@ -282,7 +291,7 @@ OBJ += $(addprefix $(BUILD)/, $(SRC_O))
 OBJ += $(addprefix $(BUILD)/, $(SRC_UTIL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_HAL:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_SYS:.c=.o))
-#OBJ += $(addprefix $(BUILD)/, $(SRC_USBDEV:.c=.o))
+OBJ += $(addprefix $(BUILD)/, $(SRC_USBDEV:.c=.o))
 OBJ += $(addprefix $(BUILD)/, $(SRC_MOD:.c=.o))
 OBJ += $(BUILD)/pins_$(BOARD).o
 

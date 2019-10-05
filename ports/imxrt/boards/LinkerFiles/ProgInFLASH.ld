@@ -6,12 +6,14 @@
  * Generated linker script file for MIMXRT1052xxxxB
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.0.0 [Build 2516] [2019-06-05] on Oct 3, 2019 3:25:30 PM
+ * MCUXpresso IDE v11.0.0 [Build 2516] [2019-06-05] on Oct 4, 2019 3:32:48 PM
  */
 
 /*
-INCLUDE "MIMXRT1052_RAM_Debug_library.ld"
-  Created error with: "libcr_newlib_semihost.a"
+INCLUDE "MIMXRT1052xxxxB_Project_Test_Debug_library.ld"
+
+Removed:   "libcr_newlib_semihost.a"
+
 */
 GROUP (
   "libgcc.a"
@@ -19,18 +21,25 @@ GROUP (
   "libm.a"
 )
 
+
 /*
-INCLUDE "MIMXRT1052_RAM_Debug_memory.ld"
+INCLUDE "MIMXRT1052xxxxB_Project_Test_Debug_memory.ld"
 */
 MEMORY
 {
   /* Define each memory region */
+  BOARD_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 0x800000 /* 8M bytes (alias Flash) */  
   SRAM_DTC (rwx) : ORIGIN = 0x20000000, LENGTH = 0x20000 /* 128K bytes (alias RAM) */  
   SRAM_ITC (rwx) : ORIGIN = 0x0, LENGTH = 0x20000 /* 128K bytes (alias RAM2) */  
   SRAM_OC (rwx) : ORIGIN = 0x20200000, LENGTH = 0x40000 /* 256K bytes (alias RAM3) */  
+  BOARD_SDRAM (rwx) : ORIGIN = 0x80000000, LENGTH = 0x2000000 /* 32M bytes (alias RAM4) */  
 }
 
   /* Define a symbol for the top of each memory region */
+  __base_BOARD_FLASH = 0x60000000  ; /* BOARD_FLASH */  
+  __base_Flash = 0x60000000 ; /* Flash */  
+  __top_BOARD_FLASH = 0x60000000 + 0x800000 ; /* 8M bytes */  
+  __top_Flash = 0x60000000 + 0x800000 ; /* 8M bytes */  
   __base_SRAM_DTC = 0x20000000  ; /* SRAM_DTC */  
   __base_RAM = 0x20000000 ; /* RAM */  
   __top_SRAM_DTC = 0x20000000 + 0x20000 ; /* 128K bytes */  
@@ -43,16 +52,36 @@ MEMORY
   __base_RAM3 = 0x20200000 ; /* RAM3 */  
   __top_SRAM_OC = 0x20200000 + 0x40000 ; /* 256K bytes */  
   __top_RAM3 = 0x20200000 + 0x40000 ; /* 256K bytes */  
+  __base_BOARD_SDRAM = 0x80000000  ; /* BOARD_SDRAM */  
+  __base_RAM4 = 0x80000000 ; /* RAM4 */  
+  __top_BOARD_SDRAM = 0x80000000 + 0x2000000 ; /* 32M bytes */  
+  __top_RAM4 = 0x80000000 + 0x2000000 ; /* 32M bytes */  
 
-
-
-
+/*
+Rest:
+*/
 
 ENTRY(ResetISR)
 
 SECTIONS
 {
-     /* MAIN TEXT SECTION */
+     /* Image Vector Table and Boot Data for booting from external flash */
+    .boot_hdr : ALIGN(4)
+    {
+        FILL(0xff)
+        __boot_hdr_start__ = ABSOLUTE(.) ;
+        KEEP(*(.boot_hdr.conf))
+        . = 0x1000 ;
+        KEEP(*(.boot_hdr.ivt))
+        . = 0x1020 ;
+        KEEP(*(.boot_hdr.boot_data))
+        . = 0x1030 ;
+        KEEP(*(.boot_hdr.dcd_data))
+        __boot_hdr_end__ = ABSOLUTE(.) ;
+        . = 0x2000 ;
+    } >BOARD_FLASH
+
+    /* MAIN TEXT SECTION */
     .text : ALIGN(4)
     {
         FILL(0xff)
@@ -71,6 +100,9 @@ SECTIONS
         LONG(LOADADDR(.data_RAM3));
         LONG(    ADDR(.data_RAM3));
         LONG(  SIZEOF(.data_RAM3));
+        LONG(LOADADDR(.data_RAM4));
+        LONG(    ADDR(.data_RAM4));
+        LONG(  SIZEOF(.data_RAM4));
         __data_section_table_end = .;
         __bss_section_table = .;
         LONG(    ADDR(.bss));
@@ -79,20 +111,22 @@ SECTIONS
         LONG(  SIZEOF(.bss_RAM2));
         LONG(    ADDR(.bss_RAM3));
         LONG(  SIZEOF(.bss_RAM3));
+        LONG(    ADDR(.bss_RAM4));
+        LONG(  SIZEOF(.bss_RAM4));
         __bss_section_table_end = .;
         __section_table_end = . ;
         /* End of Global Section Table */
 
         *(.after_vectors*)
 
-    } > SRAM_DTC
+    } > BOARD_FLASH
 
     .text : ALIGN(4)
     {
        *(.text*)
        *(.rodata .rodata.* .constdata .constdata.*)
        . = ALIGN(4);
-    } > SRAM_DTC
+    } > BOARD_FLASH
     /*
      * for exception handling/unwind - some Newlib functions (in common
      * with C++ and STDC++) use this. 
@@ -100,14 +134,14 @@ SECTIONS
     .ARM.extab : ALIGN(4) 
     {
         *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > SRAM_DTC
+    } > BOARD_FLASH
 
     __exidx_start = .;
 
     .ARM.exidx : ALIGN(4)
     {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-    } > SRAM_DTC
+    } > BOARD_FLASH
     __exidx_end = .;
  
     _etext = .;
@@ -126,7 +160,7 @@ SECTIONS
         *(.data.$SRAM_ITC.*)
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM2 = .) ;
-     } > SRAM_ITC AT>SRAM_DTC
+     } > SRAM_ITC AT>BOARD_FLASH
     /* DATA section for SRAM_OC */
 
     .data_RAM3 : ALIGN(4)
@@ -141,7 +175,22 @@ SECTIONS
         *(.data.$SRAM_OC.*)
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM3 = .) ;
-     } > SRAM_OC AT>SRAM_DTC
+     } > SRAM_OC AT>BOARD_FLASH
+    /* DATA section for BOARD_SDRAM */
+
+    .data_RAM4 : ALIGN(4)
+    {
+        FILL(0xff)
+        PROVIDE(__start_data_RAM4 = .) ;
+        *(.ramfunc.$RAM4)
+        *(.ramfunc.$BOARD_SDRAM)
+        *(.data.$RAM4)
+        *(.data.$BOARD_SDRAM)
+        *(.data.$RAM4.*)
+        *(.data.$BOARD_SDRAM.*)
+        . = ALIGN(4) ;
+        PROVIDE(__end_data_RAM4 = .) ;
+     } > BOARD_SDRAM AT>BOARD_FLASH
     /* MAIN DATA SECTION */
     .uninit_RESERVED (NOLOAD) :
     {
@@ -161,7 +210,7 @@ SECTIONS
        *(.data*)
        . = ALIGN(4) ;
        _edata = . ;
-    } > SRAM_DTC AT>SRAM_DTC
+    } > SRAM_DTC AT>BOARD_FLASH
 
     /* BSS section for SRAM_ITC */
     .bss_RAM2 :
@@ -188,6 +237,19 @@ SECTIONS
        . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
        PROVIDE(__end_bss_RAM3 = .) ;
     } > SRAM_OC
+
+    /* BSS section for BOARD_SDRAM */
+    .bss_RAM4 :
+    {
+       . = ALIGN(4) ;
+       PROVIDE(__start_bss_RAM4 = .) ;
+       *(.bss.$RAM4)
+       *(.bss.$BOARD_SDRAM)
+       *(.bss.$RAM4.*)
+       *(.bss.$BOARD_SDRAM.*)
+       . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
+       PROVIDE(__end_bss_RAM4 = .) ;
+    } > BOARD_SDRAM
 
     /* MAIN BSS SECTION */
     .bss :
@@ -222,6 +284,17 @@ SECTIONS
        *(.noinit.$SRAM_OC.*)
        . = ALIGN(4) ;
     } > SRAM_OC
+
+    /* NOINIT section for BOARD_SDRAM */
+    .noinit_RAM4 (NOLOAD) :
+    {
+       . = ALIGN(4) ;
+       *(.noinit.$RAM4)
+       *(.noinit.$BOARD_SDRAM)
+       *(.noinit.$RAM4.*)
+       *(.noinit.$BOARD_SDRAM.*)
+       . = ALIGN(4) ;
+    } > BOARD_SDRAM
 
     /* DEFAULT NOINIT SECTION */
     .noinit (NOLOAD):
