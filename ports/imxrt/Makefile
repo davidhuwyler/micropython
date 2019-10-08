@@ -13,7 +13,7 @@ include ../../py/mkenv.mk
 include boards/$(BOARD)/mpconfigboard.mk
 
 # qstr definitions (must come before including py.mk)
-override QSTR_DEFS += qstrdefsport.h $(BUILD)/pins_qstr.h $(BUILD)/modstm_qstr.h
+override QSTR_DEFS += qstrdefsport.h $(BUILD)/pins_qstr.h $(BUILD)/modmcu_qstr.h
 
 # directory containing scripts to be frozen as bytecode
 #FROZEN_MPY_DIR ?= modules
@@ -22,7 +22,6 @@ override QSTR_DEFS += qstrdefsport.h $(BUILD)/pins_qstr.h $(BUILD)/modstm_qstr.h
 include $(TOP)/py/py.mk
 
 LD_DIR=boards
-CMSIS_DIR=$(TOP_DIR)/cmsis
 HAL_DIR=mcusdk
 MCU_SERIES_UPPER = $(shell echo $(MCU_SERIES) | tr '[:lower:]' '[:upper:]')
 USBDEV_DIR=usb_misc
@@ -45,11 +44,14 @@ INC += -I.
 INC += -I..
 INC += -I$(BUILD)
 INC += -I$(USBDEV_DIR)
+INC += -I$(TOP)/lib/
+INC += -I$(TOP)/lib/cmsis/inc
 #INC += -I$(USBHOST_DIR)
 INC += -I$(HAL_DIR)
 INC += -I$(HAL_DIR)/drivers
 INC += -I$(HAL_DIR)/utilities
-INC += -I$(HAL_DIR)/CMSIS
+#INC += -I$(HAL_DIR)/CMSIS
+#INC += -I$(HAL_DIR)/CMSIS_driver
 INC += -I$(HAL_DIR)/component/serial_manager
 INC += -I$(HAL_DIR)/component/serial_manager/usb_cdc_adapter
 INC += -I$(HAL_DIR)/component/uart
@@ -63,6 +65,7 @@ INC += -I$(HAL_DIR)/usb/device/source/khci
 INC += -I$(HAL_DIR)/osa
 INC += -I$(HAL_DIR)/sdmmc
 INC += -Iflegftl
+
 
 # Options for particular MCU series
 #CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DXIP_EXTERNAL_FLASH=1 -DXIP_BOOT_HEADER_ENABLE=1 -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -D__NEWLIB__ -O0 -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -D__NEWLIB__ -fstack-usage
@@ -189,29 +192,47 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 	)
 
 SRC_C = \
+	adc.c \
+	bufhelper.c \
+	dcmc.c \
 	irq.c \
 	isr.c \
 	fatfs_port.c \
+	flash_pgm.c \
+	flash_hyper.c \
 	hal_wrapper.c \
 	pin.c \
 	pin_defs_mcu.c \
 	pin_named_pins.c \
+	pybstdio.c \
+	pwm.c \
 	mphalport.c \
+	modmcu.c \
 	modmachine.c \
+	modpyb.c \
+	moduos.c \
+	modnetwork.c \
+	modusocket.c \
+	modutime.c \
 	rpm.c \
+	rng.c \
+	rtc.c \
 	srpm.c \
 	tmr.c \
+	qtimer.c \
 	systick.c \
+	servo.c \
 	storage.c \
+	sdcard.c \
 	gccollect.c \
 	led.c \
 	flegftl/flegftl.c \
 	help.c \
 	uart.c \
+	usrsw.c \
 	pendsv.c \
 	usb_app.c \
 	uniqueID.c \
-	bufhelper.c \
 	usbd_msc_storage.c \
 	$(STARTUP_FILE) \
 	$(wildcard boards/$(BOARD)/*.c)
@@ -230,6 +251,9 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_clock.c \
 	fsl_cache.c \
 	fsl_flexspi.c \
+	fsl_snvs_hp.c \
+	fsl_trng.c \
+	fsl_qtmr.c \
 	fsl_gpio.c \
 	fsl_lpspi.c \
 	fsl_lpuart.c\
@@ -244,7 +268,14 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	usb/device/source/usb_device_dci.c \
 	usb/device/source/ehci/usb_device_ehci.c \
 	usb/device/class/usb_device_cdc_acm.c \
+	usb/device/class/usb_device_class.c \
+	usb/device/source/usb_device_ch9.c \
+	usb/phy/usb_phy.c \
 	osa/usb_osa_bm.c \
+	sdmmc/fsl_sd.c \
+	sdmmc/fsl_sdmmc_common.c \
+	sdmmc/port_usdhc_irq/fsl_sdmmc_host.c \
+	sdmmc/port_usdhc_irq/fsl_sdmmc_event.c \
 	)
 	
 SRC_SYS = $(addprefix $(HAL_DIR)/, \
@@ -435,10 +466,10 @@ $(BUILD)/%_$(BOARD).c $(HEADER_BUILD)/%.h $(HEADER_BUILD)/%_af_const.h $(BUILD)/
 $(BUILD)/pins_$(BOARD).o: $(BUILD)/pins_$(BOARD).c
 	$(call compile_c)
 
-GEN_PLLFREQTABLE_HDR = $(HEADER_BUILD)/pllfreqtable.h
-GEN_STMCONST_HDR = $(HEADER_BUILD)/modstm_const.h
-GEN_STMCONST_QSTR = $(BUILD)/modstm_qstr.h
-GEN_STMCONST_MPZ = $(HEADER_BUILD)/modstm_mpz.h
+#GEN_PLLFREQTABLE_HDR = $(HEADER_BUILD)/pllfreqtable.h
+GEN_MCUCONST_HDR = $(HEADER_BUILD)/modmcu_const.h
+GEN_MCUCONST_QSTR = $(BUILD)/modmcu_qstr.h
+GEN_MCUCONST_MPZ = $(HEADER_BUILD)/modmcu_mpz.h
 CMSIS_MCU_UPPER = $(shell echo $(CMSIS_MCU) | tr '[:lower:]' '[:upper:]')
 CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_UPPER).h
 
@@ -448,12 +479,16 @@ CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_UPPER).h
 #	$(ECHO) "GEN $@"
 #	$(Q)$(PYTHON) $(PLLVALUES) -c file:boards/$(BOARD)/stm32$(MCU_SERIES)xx_hal_conf.h > $@
 
-$(BUILD)/modstm.o: $(GEN_STMCONST_HDR)
+$(BUILD)/modmcu_qstr.h: $(CMSIS_MCU_HDR) make-mcuconst.py | $(HEADER_BUILD)
+	$(ECHO) "Rocky's create modmcu_qstr.h"
+	$(Q)$(PYTHON) make-mcuconst.py -bf --qstr $(GEN_MCUCONST_QSTR) --mpz $(GEN_MCUCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_MCUCONST_HDR)
+	
+$(BUILD)/modmcu.o: $(GEN_MCUCONST_HDR)
 # Use a pattern rule here so that make will only call make-stmconst.py once to
 # make both modstm_const.h and modstm_qstr.h
 $(HEADER_BUILD)/%_const.h $(BUILD)/%_qstr.h: $(CMSIS_MCU_HDR) make-mcuconst.py | $(HEADER_BUILD)
-	$(ECHO) "GEN stmconst $@"
-	$(Q)$(PYTHON) make-mcuconst.py --qstr $(GEN_STMCONST_QSTR) --mpz $(GEN_STMCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_STMCONST_HDR)
+	$(ECHO) "Create mcuconst $@"
+	$(Q)$(PYTHON) make-mcuconst.py --qstr $(GEN_MCUCONST_QSTR) --mpz $(GEN_MCUCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_MCUCONST_HDR)
 
 $(GEN_CDCINF_HEADER): $(FILE2H) | $(HEADER_BUILD)
 	$(ECHO) "GEN $@"

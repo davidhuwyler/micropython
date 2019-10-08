@@ -166,13 +166,13 @@ extern const struct _mp_obj_module_t mp_module_utime;
 extern const struct _mp_obj_module_t mp_module_usocket;
 extern const struct _mp_obj_module_t mp_module_network;
 extern const struct _mp_obj_module_t time_module;
-extern const struct _mp_obj_module_t lcd_module;
+//extern const struct _mp_obj_module_t lcd_module;
 #ifndef OMV_MPY_ONLY
-extern const struct _mp_obj_module_t sensor_module;
-extern const struct _mp_obj_module_t image_module;
-extern const struct _mp_obj_module_t mjpeg_module;
-extern const struct _mp_obj_module_t nn_module;
-extern const struct _mp_obj_module_t gif_module;
+//extern const struct _mp_obj_module_t sensor_module;
+//extern const struct _mp_obj_module_t image_module;
+//extern const struct _mp_obj_module_t mjpeg_module;
+//extern const struct _mp_obj_module_t nn_module;
+//extern const struct _mp_obj_module_t gif_module;
 #endif
 
 #if MICROPY_PY_USOCKET
@@ -190,7 +190,7 @@ extern const struct _mp_obj_module_t gif_module;
 #endif
 
 //TODO Dave: Define the modules for the seeed studio board
-//#define OMVRT_PORT_ONGONING
+#define OMVRT_PORT_ONGONING
 
 #if defined(OMV_MPY_ONLY)
 	#define MICROPY_PORT_BUILTIN_MODULES \
@@ -217,8 +217,15 @@ extern const struct _mp_obj_module_t gif_module;
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
 #elif defined(OMVRT_PORT_ONGONING)
-#define MICROPY_PORT_BUILTIN_MODULES \
-{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module },
+	#define MICROPY_PORT_BUILTIN_MODULES \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_uos), (mp_obj_t)&mp_module_uos }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
+	SOCKET_BUILTIN_MODULE \
+	NETWORK_BUILTIN_MODULE
 #else
 	#define MICROPY_PORT_BUILTIN_MODULES \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
@@ -262,20 +269,6 @@ extern const struct _mp_obj_module_t gif_module;
     { MP_OBJ_NEW_QSTR(MP_QSTR_machine), (mp_obj_t)&machine_module }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module }, \
-
-	// extra constants
-#if defined(OMVRT_PORT_ONGONING)
-#define MICROPY_PORT_CONSTANTS \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module },
-#else
-#define MICROPY_PORT_CONSTANTS \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_umachine), (mp_obj_t)&machine_module }, \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_machine), (mp_obj_t)&machine_module }, \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_pyb), (mp_obj_t)&pyb_module }, \
-	{ MP_OBJ_NEW_QSTR(MP_QSTR_mcu), (mp_obj_t)&mcu_module },
-#endif
-
-
 
 #define MICROPY_HW_MAX_UART (10)
 

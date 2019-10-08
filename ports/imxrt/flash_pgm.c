@@ -3,6 +3,10 @@
 #include "flash_pgm.h"
 #include "overlay_manager.h"
 
+#ifndef   __WEAK
+  #define __WEAK                                 __attribute__((weak))
+#endif
+
 int HyperErase(int euNdx) {
 	OVERLAY_SWITCH();
 	flexspi_nor_flash_erase_sector(FLEXSPI, FLEG_FLASH_OFFSET + euNdx * 256 * 1024);

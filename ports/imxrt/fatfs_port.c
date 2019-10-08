@@ -24,6 +24,7 @@
  * THE SOFTWARE.
  */
 
+#include "board.h"
 #include "py/runtime.h"
 #include "lib/oofatfs/ff.h"
 #include "rtc.h"

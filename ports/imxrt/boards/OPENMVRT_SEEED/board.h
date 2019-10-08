@@ -38,9 +38,12 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
+#include <stdint.h>
+
 #include "clock_config.h"
 #include "fsl_common.h"
 #include "fsl_gpio.h"
+
 
 /*******************************************************************************
  * Definitions
@@ -291,7 +294,12 @@ extern "C" {
 /**
  * @brief 	Initialize board specific settings.
  */
+
+int _sbrk();
+
 void BOARD_InitDebugConsole(void);
+
+void BOARD_ConfigMPU(void);
 
 #if defined(__cplusplus)
 }
