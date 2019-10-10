@@ -1,9 +1,12 @@
 /*
- * Copyright 2017-2019 NXP
+ * The Clear BSD License
+ * Copyright (c) 2016, Freescale Semiconductor, Inc.
+ * Copyright 2016-2017 NXP
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
+ * are permitted (subject to the limitations in the disclaimer below) provided
+ *  that the following conditions are met:
  *
  * o Redistributions of source code must retain the above copyright notice, this list
  *   of conditions and the following disclaimer.
@@ -12,10 +15,11 @@
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
  *
- * o Neither the name of NXP Semiconductor, Inc. nor the names of its
+ * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
  *   contributors may be used to endorse or promote products derived from this
  *   software without specific prior written permission.
  *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -28,29 +32,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * @file    pin_mux.h
- * @brief   Board pins header file.
- */
- 
-/* This is a template for board specific configuration created by MCUXpresso IDE Project Wizard.*/
-
 #ifndef _PIN_MUX_H_
 #define _PIN_MUX_H_
 
+
+/*!
+ * @addtogroup pin_mux
+ * @{
+ */
+
+/*******************************************************************************
+ * API
+ ******************************************************************************/
+
 #if defined(__cplusplus)
 extern "C" {
-#endif /* __cplusplus */
+#endif
 
-/**
- * @brief 	Initialize board pins.
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
  */
-void BOARD_InitBootPins(void);
+void BOARD_InitPins(void);
 
 #if defined(__cplusplus)
 }
-#endif /* __cplusplus */
+#endif
 
+/*!
+ * @}
+ */
 #endif /* _PIN_MUX_H_ */
 
-
+/*******************************************************************************
+ * EOF
+ ******************************************************************************/

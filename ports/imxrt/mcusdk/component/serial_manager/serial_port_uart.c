@@ -11,7 +11,7 @@
 #include "serial_port_internal.h"
 
 #if (defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART > 0U))
-#include "uart.h"
+#include "uart_hal.h"
 
 #include "serial_port_uart.h"
 

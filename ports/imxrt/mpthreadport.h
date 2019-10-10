@@ -1,9 +1,9 @@
 /*
- * This file is part of the Micro Python project, http://micropython.org/
+ * This file is part of the MicroPython project, http://micropython.org/
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2013, 2014 Damien P. George
+ * Copyright (c) 2016 Damien P. George
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,40 +23,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#ifndef __MICROPY_INCLUDED_STMHAL_MPTHREADPORT_H__
+#define __MICROPY_INCLUDED_STMHAL_MPTHREADPORT_H__
 
-// >>> rocky: dummy example
-// #define MICROPY_HW_LED1_PWM         { GPT2, 1, 3}
-// #define MICROPY_HW_LED3_PWM         { GPT2, 1, 3}
-// <<<
-#define MICROPY_HW_LED_ON(pin)      (mp_hal_pin_low(pin))
-#define MICROPY_HW_LED_OFF(pin)     (mp_hal_pin_high(pin))
+#include "py/mpthread.h"
+#include "pybthread.h"
 
-typedef enum {
-    // PYBv3
-    PYB_LED_R1 = 1,
-    PYB_LED_R2 = 2,
-    PYB_LED_G1 = 3,
-    PYB_LED_G2 = 4,
-    // PYBv4
-    PYB_LED_RED = 1,
-    PYB_LED_GREEN = 2,
-    PYB_LED_YELLOW = 3,
-    PYB_LED_BLUE = 4,
-    //STM32F4DISC
-    PYB_LED_R = 1,
-    PYB_LED_G = 2,
-    PYB_LED_B = 3,
-    PYB_LED_O = 4,
-    //OpenMV
-    LED_RED=1,
-    LED_GREEN=2,
-    LED_BLUE=3,
-    LED_IR=4,    
-} pyb_led_t;
+typedef pyb_mutex_t mp_thread_mutex_t;
 
-void led_init(void);
-void led_state(pyb_led_t led, int state);
-void led_toggle(pyb_led_t led);
-void led_debug(int value, int delay);
+void mp_thread_init(void);
+void mp_thread_gc_others(void);
 
-extern const mp_obj_type_t pyb_led_type;
+static inline void mp_thread_set_state(void *state) {
+    pyb_thread_set_local(state);
+}
+
+static inline struct _mp_state_thread_t *mp_thread_get_state(void) {
+    return pyb_thread_get_local();
+}
+
+static inline void mp_thread_mutex_init(mp_thread_mutex_t *m) {
+    pyb_mutex_init(m);
+}
+
+static inline int mp_thread_mutex_lock(mp_thread_mutex_t *m, int wait) {
+    return pyb_mutex_lock(m, wait);
+}
+
+static inline void mp_thread_mutex_unlock(mp_thread_mutex_t *m) {
+    pyb_mutex_unlock(m);
+}
+
+#endif // __MICROPY_INCLUDED_STMHAL_MPTHREADPORT_H__

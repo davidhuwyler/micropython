@@ -52,9 +52,9 @@ INC += -I$(HAL_DIR)/drivers
 INC += -I$(HAL_DIR)/utilities
 #INC += -I$(HAL_DIR)/CMSIS
 #INC += -I$(HAL_DIR)/CMSIS_driver
+INC += -I$(HAL_DIR)/component/uart
 INC += -I$(HAL_DIR)/component/serial_manager
 INC += -I$(HAL_DIR)/component/serial_manager/usb_cdc_adapter
-INC += -I$(HAL_DIR)/component/uart
 INC += -I$(HAL_DIR)/usb/phy
 INC += -I$(HAL_DIR)/usb/include
 INC += -I$(HAL_DIR)/usb/device/include
@@ -65,7 +65,7 @@ INC += -I$(HAL_DIR)/usb/device/source/khci
 INC += -I$(HAL_DIR)/osa
 INC += -I$(HAL_DIR)/sdmmc
 INC += -Iflegftl
-
+INC += -Iusb_misc
 
 # Options for particular MCU series
 #CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DXIP_EXTERNAL_FLASH=1 -DXIP_BOOT_HEADER_ENABLE=1 -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -D__NEWLIB__ -O0 -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -D__NEWLIB__ -fstack-usage
@@ -205,8 +205,10 @@ SRC_C = \
 	pin_defs_mcu.c \
 	pin_named_pins.c \
 	pybstdio.c \
+	pybthread.c \
 	pwm.c \
 	mphalport.c \
+	mpthreadport.c \
 	modmcu.c \
 	modmachine.c \
 	modpyb.c \
@@ -236,6 +238,8 @@ SRC_C = \
 	usbd_msc_storage.c \
 	$(STARTUP_FILE) \
 	$(wildcard boards/$(BOARD)/*.c)
+	
+		# 	usbdbg.c  TODO Dave: include after sensor works... Uses Sensor...
 
 SRC_O = \
 	resethandler.o \
@@ -270,6 +274,10 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	usb/device/class/usb_device_cdc_acm.c \
 	usb/device/class/usb_device_class.c \
 	usb/device/source/usb_device_ch9.c \
+	utilities/fls_debug_console.c \
+	component/serial_manager/serial_manager.c \
+	component/serial_manager/serial_port_uart.c \
+	component/uart/lpuart_adapter.c \
 	usb/phy/usb_phy.c \
 	osa/usb_osa_bm.c \
 	sdmmc/fsl_sd.c \
@@ -277,6 +285,8 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	sdmmc/port_usdhc_irq/fsl_sdmmc_host.c \
 	sdmmc/port_usdhc_irq/fsl_sdmmc_event.c \
 	)
+	
+
 	
 SRC_SYS = $(addprefix $(HAL_DIR)/, \
 	system_MIMXRT1052.c \

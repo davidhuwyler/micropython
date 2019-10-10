@@ -66,6 +66,9 @@ ENTRY(ResetISR)
 
 SECTIONS
 {
+/*---------------------------------------------------------------------------------
+ExternalFlash:  (BOARD_FLASH)
+---------------------------------------------------------------------------------*/
      /* Image Vector Table and Boot Data for booting from external flash */
     .boot_hdr : ALIGN(4)
     {
@@ -147,6 +150,10 @@ SECTIONS
  
     _etext = .;
         
+
+/*---------------------------------------------------------------------------------
+InstructionTightCoupledMemory:  (SRAM_ITC)
+---------------------------------------------------------------------------------*/
     /* DATA section for SRAM_ITC */
 
     .data_RAM2 : ALIGN(4)
@@ -162,6 +169,10 @@ SECTIONS
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM2 = .) ;
      } > SRAM_ITC AT>BOARD_FLASH
+
+/*---------------------------------------------------------------------------------
+OnChip Memory:  (SRAM_OC)
+---------------------------------------------------------------------------------*/
     /* DATA section for SRAM_OC */
 
     .data_RAM3 : ALIGN(4)
@@ -177,6 +188,11 @@ SECTIONS
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM3 = .) ;
      } > SRAM_OC AT>BOARD_FLASH
+
+
+/*---------------------------------------------------------------------------------
+External RAM:  (BOARD_SDRAM)
+---------------------------------------------------------------------------------*/
     /* DATA section for BOARD_SDRAM */
 
     .data_RAM4 : ALIGN(4)
@@ -201,6 +217,9 @@ SECTIONS
         _end_uninit_RESERVED = .;
     } > SRAM_DTC
 
+/*---------------------------------------------------------------------------------
+DataTightCoupledMemory RAM:  (SRAM_DTC)
+---------------------------------------------------------------------------------*/
     /* Main DATA section (SRAM_DTC) */
     .data : ALIGN(4)
     {
@@ -213,6 +232,10 @@ SECTIONS
        _edata = . ;
     } > SRAM_DTC AT>BOARD_FLASH
 
+
+/*---------------------------------------------------------------------------------
+BSS (uninitialized Data) in all memo Sections
+---------------------------------------------------------------------------------*/
     /* BSS section for SRAM_ITC */
     .bss_RAM2 :
     {
@@ -264,6 +287,9 @@ SECTIONS
         PROVIDE(end = .);
     } > SRAM_DTC
 
+/*---------------------------------------------------------------------------------
+NOINIT in all memo Sections
+---------------------------------------------------------------------------------*/
     /* NOINIT section for SRAM_ITC */
     .noinit_RAM2 (NOLOAD) :
     {
@@ -307,8 +333,13 @@ SECTIONS
         _end_noinit = .;
     } > SRAM_DTC
 
+
+
+/*---------------------------------------------------------------------------------
+Heap
+---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map */
-    _HeapSize = 0x1000;
+    _HeapSize = 0x4000;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;
@@ -317,7 +348,10 @@ SECTIONS
         _pvHeapLimit = .;
     } > SRAM_DTC
 
-     _StackSize = 0x1000;
+/*---------------------------------------------------------------------------------
+Stack
+---------------------------------------------------------------------------------*/
+     _StackSize = 0x2000;
      /* Reserve space in memory for Stack */
     .heap2stackfill  :
     {
@@ -331,6 +365,8 @@ SECTIONS
         _vStackTop = . + _StackSize;
     } > SRAM_DTC
 
+	PROVIDE(_estack = _vStackTop);
+
     /* Provide basic symbols giving location and size of main text
      * block, including initial values of RW data sections. Note that
      * these will need extending to give a complete picture with
@@ -340,7 +376,9 @@ SECTIONS
     _image_end = LOADADDR(.data) + SIZEOF(.data);
     _image_size = _image_end - _image_start;
 
-
+/*---------------------------------------------------------------------------------
+OpenMV (Framebuffer...
+---------------------------------------------------------------------------------*/
   /*Custom Part for OpenMV:
   /* Main framebuffer memory OMV_FB_SIZE +  OMV_FB_ALLOC_SIZE*/
   .fb_memory (NOLOAD) :
@@ -353,14 +391,17 @@ SECTIONS
     _fballoc = .;
 
   } >BOARD_SDRAM
+}
 
   /*TODO Dave: Define proper variables... & Memomap*/
-  _estack     = __top_SRAM_DTC;
+  _estack     = _vStackTop;
+  __StackTop  = _vStackTop;
+  __StackSize = _StackSize;
   _ram_end    = __top_SRAM_DTC;
-  _sidata = __base_BOARD_FLASH;
-  _sdata = __base_BOARD_SDRAM;
-  _sbss = __base_SRAM_DTC;
-  _ram_start = __base_SRAM_DTC;
-  _heap_start = __base_SRAM_DTC;
-  _heap_end = __base_SRAM_DTC;
-}
+  _ram_start  = __base_SRAM_DTC;
+  _sidata     = __base_BOARD_FLASH;
+  _sdata      = __base_BOARD_SDRAM;
+  _sbss       = __base_SRAM_DTC;
+
+  _heap_start  = _pvHeapStart;
+  _heap_end    = _pvHeapLimit;

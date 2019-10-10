@@ -9,7 +9,7 @@
 #include "fsl_common.h"
 #include "fsl_lpuart.h"
 
-#include "uart.h"
+#include "uart_hal.h"
 
 /*******************************************************************************
  * Definitions

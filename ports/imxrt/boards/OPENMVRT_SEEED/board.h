@@ -295,7 +295,7 @@ extern "C" {
  * @brief 	Initialize board specific settings.
  */
 
-//int _sbrk();
+int _sbrk();
 
 void BOARD_InitDebugConsole(void);
 
