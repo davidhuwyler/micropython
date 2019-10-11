@@ -63,6 +63,7 @@ INC += -I$(HAL_DIR)/usb/device/source
 INC += -I$(HAL_DIR)/usb/device/source/ehci
 INC += -I$(HAL_DIR)/usb/device/source/khci
 INC += -I$(HAL_DIR)/osa
+INC += -I$(HAL_DIR)/video
 INC += -I$(HAL_DIR)/sdmmc
 INC += -Iflegftl
 INC += -Iusb_misc
@@ -239,8 +240,6 @@ SRC_C = \
 	$(STARTUP_FILE) \
 	$(wildcard boards/$(BOARD)/*.c)
 	
-		# 	usbdbg.c  TODO Dave: include after sensor works... Uses Sensor...
-
 SRC_O = \
 	resethandler.o \
 	gchelper.o \
@@ -264,7 +263,6 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_usdhc.c \
 	fsl_elcdif.c \
 	fsl_csi.c \
-	fsl_csi_camera_adapter.c \
 	fsl_lpi2c.c \
 	)
 	
@@ -284,8 +282,11 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	sdmmc/fsl_sdmmc_common.c \
 	sdmmc/port_usdhc_irq/fsl_sdmmc_host.c \
 	sdmmc/port_usdhc_irq/fsl_sdmmc_event.c \
-	)
-	
+	video/fsl_csi_camera_adapter.c \
+	video/fsl_sccb.c \
+	video/fsl_ov7725.c \
+	video/fsl_video_common.c \
+	)	
 
 	
 SRC_SYS = $(addprefix $(HAL_DIR)/, \

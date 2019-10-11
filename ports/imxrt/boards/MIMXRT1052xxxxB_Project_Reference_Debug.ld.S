@@ -379,18 +379,25 @@ Stack
 /*---------------------------------------------------------------------------------
 OpenMV (Framebuffer...
 ---------------------------------------------------------------------------------*/
-  /*Custom Part for OpenMV:
-  /* Main framebuffer memory OMV_FB_SIZE +  OMV_FB_ALLOC_SIZE*/
-  .fb_memory (NOLOAD) :
+  /*Custom Part for OpenMV: */
+  FB_SIZE  = 160*1024;
+  FB_ALLOC_SIZE = 13*1024;
+  JPEG_SIZE  = 23*1024;
+  .dtcm_fbs :
   {
-    . = ALIGN(4);
-    _fb_base = .;
-    . = . + 400k + 96k;
+    . = ALIGN(8);
+    _ld_main_fb = .;
+	. += FB_SIZE + FB_ALLOC_SIZE;
+	/* fb_alloc is at the end of FB (with margin) */
+	_ld_fballoc = .;
+	_ld_jpeg_buf = .;
+	. += JPEG_SIZE;
+	. = ALIGN(4);
+  } > BOARD_SDRAM
+  PROVIDE(_jpeg_buf = _ld_jpeg_buf);
+  PROVIDE(_fb_base = _ld_main_fb);
+  PROVIDE(_fballoc = _ld_fballoc);
 
-    . = ALIGN(4);
-    _fballoc = .;
-
-  } >BOARD_SDRAM
 }
 
   /*TODO Dave: Define proper variables... & Memomap*/

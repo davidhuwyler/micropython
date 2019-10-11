@@ -675,9 +675,7 @@ bool VCOM_IsTxIdle(void) {
 	return s_isTxIdle ? 1 : 0;
 }
 
-//TODO Dave Implement Properly...:
-//extern volatile uint8_t g_omvIdeConnecting;
-volatile uint8_t g_omvIdeConnecting = 0;
+extern volatile uint8_t g_omvIdeConnecting;
 
 bool VCOM_OmvIsIdeConnecting(void) {
 	return g_omvIdeConnecting;
