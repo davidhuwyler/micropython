@@ -44,7 +44,25 @@
 #include "fsl_common.h"
 #include "fsl_debug_console.h"
 
-int _sbrk() {return 0;}
+//int _sbrk() {return 0;}
+extern uint32_t _heap_end;
+void *_sbrk ( uint32_t delta )
+{
+extern char _end; /* Defined by the linker */
+static char *heap_end;
+char *prev_heap_end;
+
+  if (heap_end == 0) {
+    heap_end = &_heap_end;
+  }
+
+  prev_heap_end = heap_end;
+  //if (prev_heap_end+delta > get_stack_pointer()) {
+  //       return (void *) -1L;
+  //}
+  heap_end += delta;
+  return (void *) prev_heap_end;
+}
 
 /**
  * @brief Set up and initialize all required blocks and functions related to the board hardware.

@@ -138,7 +138,8 @@ uint32_t _ConfigUartClock(uint32_t clkSrcSel)
 	} else {
 		clock_usb_pll_config_t pllCfg;
 		pllCfg.loopDivider = 0;	// 0=XTAL*20=480MHz , 1=*22
-		CLOCK_InitUsb1Pll(&pllCfg);
+		//TODO Dave: Programm crashes if enabled:
+		//CLOCK_InitUsb1Pll(&pllCfg);
 		CLOCK_SetMux(kCLOCK_UartMux, 0);	// mux0 = PLLUSB1
 	}
 	return _GetUartClock();

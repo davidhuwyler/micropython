@@ -26,10 +26,7 @@
 #ifndef _SDCARD_H_
 #define _SDCARD_H_
 #include "mpconfigboard.h"
-// SD card detect switch
-#define MICROPY_HW_SDCARD_DETECT_PIN        (pin_33)
-#define MICROPY_HW_SDCARD_DETECT_PULL       (1) // (GPIO_PULLUP)
-#define MICROPY_HW_SDCARD_DETECT_PRESENT    (2) // (GPIO_PIN_RESET)
+
 
 // this is a fixed size and should not be changed
 #define SDCARD_BLOCK_SIZE (512)
@@ -41,6 +38,7 @@ bool sdcard_power_on(void);
 void sdcard_power_off(void);
 uint64_t sdcard_get_capacity_in_bytes(void);
 uint32_t sdcard_get_lba_count(void);
+void sdcard_setSysPathToSD(void);
 
 // these return 0 on success, non-zero on error
 mp_uint_t sdcard_read_blocks(uint8_t *dest, uint32_t block_num, uint32_t num_blocks);

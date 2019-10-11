@@ -230,6 +230,7 @@ SRC_C = \
 	gccollect.c \
 	led.c \
 	flegftl/flegftl.c \
+	flash.c \
 	help.c \
 	uart.c \
 	usrsw.c \

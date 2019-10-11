@@ -557,7 +557,7 @@ void SysTick_C_Handler(ExceptionRegisters_t *regs) {
 	//SRPM_TickHandler();
 	SwTimerHandler();
 	
-	//SDMMC_Tick_Handler();
+	SDMMC_Tick_Handler();
 
     // Read the systick control regster. This has the side effect of clearing
     // the COUNTFLAG bit, which makes the logic in mp_hal_ticks_us

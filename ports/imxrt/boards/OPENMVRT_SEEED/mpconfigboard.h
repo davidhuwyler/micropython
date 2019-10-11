@@ -19,6 +19,11 @@
 #define MICROPY_HW_LED2             (pin_AD_B0_10) // green GPIO_AD_B0_10
 #define MICROPY_HW_LED3             (pin_AD_B0_11) // blue  GPIO_AD_B0_11
 
+// SD card detect switch
+#define MICROPY_HW_SDCARD_DETECT_PIN        (pin_B1_12)
+#define MICROPY_HW_SDCARD_DETECT_PULL       (1) // (GPIO_PULLUP)
+#define MICROPY_HW_SDCARD_DETECT_PRESENT    (2) // (GPIO_PIN_RESET)
+
 
 // XTAL is 12MHz
 

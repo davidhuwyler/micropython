@@ -252,7 +252,10 @@ status_t sdcard_init(void) {
 	while (!s_cardInserted)
 	{
 		if (HAL_GetTick() - t1 > 200)
-			break;
+		{
+			PRINTF("\r\nno SD card inserted.\r\n");
+			return -1;
+		}
 	}
 
 	PRINTF("\r\nCard inserted.\r\n");
@@ -514,6 +517,12 @@ void sdcard_init_vfs(fs_user_mount_t *vfs, int part) {
     vfs->writeblocks[2] = (mp_obj_t)sdcard_write_blocks; // native version
     vfs->u.ioctl[0] = (mp_obj_t)&pyb_sdcard_ioctl_obj;
     vfs->u.ioctl[1] = (mp_obj_t)&pyb_sdcard_obj;
+}
+
+void sdcard_setSysPathToSD(void)
+{
+    mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_sd));
+    mp_obj_list_append(mp_sys_path, MP_OBJ_NEW_QSTR(MP_QSTR__slash_sd_slash_lib));
 }
 
 #endif // MICROPY_HW_HAS_SDCARD

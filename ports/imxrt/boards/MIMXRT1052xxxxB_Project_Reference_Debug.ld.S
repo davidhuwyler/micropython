@@ -339,7 +339,7 @@ NOINIT in all memo Sections
 Heap
 ---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map */
-    _HeapSize = 0x4000;
+    _HeapSize = 0xA000;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;
@@ -351,7 +351,7 @@ Heap
 /*---------------------------------------------------------------------------------
 Stack
 ---------------------------------------------------------------------------------*/
-     _StackSize = 0x2000;
+     _StackSize = 0xF000;
      /* Reserve space in memory for Stack */
     .heap2stackfill  :
     {
