@@ -65,37 +65,6 @@
 #define BOARD_DEBUG_UART_BAUDRATE (115200U)
 #endif /* BOARD_DEBUG_UART_BAUDRATE */
 
-/*! @brief The USER_LED used for board */
-#define LOGIC_LED_ON (0U)
-#define LOGIC_LED_OFF (1U)
-#ifndef BOARD_USER_LED_GPIO
-#define BOARD_USER_LED_GPIO GPIO1
-#endif
-#ifndef BOARD_USER_LED_GPIO_PIN
-#define BOARD_USER_LED_GPIO_PIN (9U)
-#endif
-
-#define USER_LED_INIT(output)                                            \
-    GPIO_PinWrite(BOARD_USER_LED_GPIO, BOARD_USER_LED_GPIO_PIN, output); \
-    BOARD_USER_LED_GPIO->GDIR |= (1U << BOARD_USER_LED_GPIO_PIN) /*!< Enable target USER_LED */
-#define USER_LED_ON() \
-    GPIO_PortClear(BOARD_USER_LED_GPIO, 1U << BOARD_USER_LED_GPIO_PIN)                  /*!< Turn off target USER_LED */
-#define USER_LED_OFF() GPIO_PortSet(BOARD_USER_LED_GPIO, 1U << BOARD_USER_LED_GPIO_PIN) /*!<Turn on target USER_LED*/
-#define USER_LED_TOGGLE()                                       \
-    GPIO_PinWrite(BOARD_USER_LED_GPIO, BOARD_USER_LED_GPIO_PIN, \
-                  0x1 ^ GPIO_PinRead(BOARD_USER_LED_GPIO, BOARD_USER_LED_GPIO_PIN)) /*!< Toggle target USER_LED */
-
-/*! @brief Define the port interrupt number for the board switches */
-#ifndef BOARD_USER_BUTTON_GPIO
-#define BOARD_USER_BUTTON_GPIO GPIO5
-#endif
-#ifndef BOARD_USER_BUTTON_GPIO_PIN
-#define BOARD_USER_BUTTON_GPIO_PIN (0U)
-#endif
-#define BOARD_USER_BUTTON_IRQ GPIO5_Combined_0_15_IRQn
-#define BOARD_USER_BUTTON_IRQ_HANDLER GPIO5_Combined_0_15_IRQHandler
-#define BOARD_USER_BUTTON_NAME "SW8"
-
 /*! @brief The Enet instance used for board. */
 #define BOARD_ENET_BASEADDR ENET
 
@@ -131,11 +100,8 @@
 
 #define BOARD_SD_POWER_RESET_GPIO (GPIO1)
 #define BOARD_SD_POWER_RESET_GPIO_PIN (5U)
-
 #define BOARD_USDHC_CARD_INSERT_CD_LEVEL (0U)
-
 #define BOARD_USDHC_MMCCARD_POWER_CONTROL(state)
-
 #define BOARD_USDHC_MMCCARD_POWER_CONTROL_INIT()                                            \
     {                                                                                       \
         gpio_pin_config_t sw_config = {                                                     \

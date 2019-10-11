@@ -33,12 +33,6 @@
 #include "clock_config.h"
 #include "py/obj.h"
 
-
-#define MICROPY_HW_USRSW_PIN        (pin_WAKEUP)
-#define MICROPY_HW_USRSW_PULL       (1) //(GPIO_PULLUP)
-#define MICROPY_HW_USRSW_EXTI_MODE  (2) //(GPIO_MODE_IT_FALLING)
-#define MICROPY_HW_USRSW_PRESSED    (0)
-
 void switch_init0(void);
 int switch_get(void);
 extern const mp_obj_type_t pyb_switch_type;
