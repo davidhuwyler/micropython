@@ -1087,7 +1087,7 @@ typedef double mp_float_t;
 
 // Whether to provide "_thread" module
 #ifndef MICROPY_PY_THREAD
-#define MICROPY_PY_THREAD (0)
+#define MICROPY_PY_THREAD (1)
 #endif
 
 // Whether to make the VM/runtime thread-safe using a global lock

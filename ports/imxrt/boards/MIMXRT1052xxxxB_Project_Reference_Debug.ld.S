@@ -339,7 +339,7 @@ NOINIT in all memo Sections
 Heap
 ---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map */
-    _HeapSize = 0xA000;
+    _HeapSize = 0x4000;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;
@@ -351,7 +351,7 @@ Heap
 /*---------------------------------------------------------------------------------
 Stack
 ---------------------------------------------------------------------------------*/
-     _StackSize = 0xF000;
+     _StackSize = 0x2000;
      /* Reserve space in memory for Stack */
     .heap2stackfill  :
     {
@@ -379,24 +379,27 @@ Stack
 /*---------------------------------------------------------------------------------
 OpenMV (Framebuffer...
 ---------------------------------------------------------------------------------*/
-  /*Custom Part for OpenMV: */
-  FB_SIZE  = 160*1024;
-  FB_ALLOC_SIZE = 13*1024;
-  JPEG_SIZE  = 23*1024;
-  .dtcm_fbs :
+  /*FrameBuffer in Ext.SDRAM: */
+  FB_SIZE  = 100*1024;
+  FB_ALLOC_SIZE = 100*1024;
+  .frameBuffers :
   {
     . = ALIGN(8);
     _ld_main_fb = .;
 	. += FB_SIZE + FB_ALLOC_SIZE;
 	/* fb_alloc is at the end of FB (with margin) */
 	_ld_fballoc = .;
+  } > BOARD_SDRAM
+
+  /*FrameBuffer in SRAM_DTC (uncached): */
+  JPEG_SIZE  = 50*1024;
+  .jpegFb :
+  {
+    . = ALIGN(4);
 	_ld_jpeg_buf = .;
 	. += JPEG_SIZE;
-	. = ALIGN(4);
-  } > BOARD_SDRAM
-  PROVIDE(_jpeg_buf = _ld_jpeg_buf);
-  PROVIDE(_fb_base = _ld_main_fb);
-  PROVIDE(_fballoc = _ld_fballoc);
+  } > SRAM_DTC
+
 
 }
 
@@ -412,3 +415,7 @@ OpenMV (Framebuffer...
 
   _heap_start  = _pvHeapStart;
   _heap_end    = _pvHeapLimit;
+
+  _fb_base = _ld_main_fb;
+  _jpeg_buf = _ld_jpeg_buf;
+  _fballoc = _ld_fballoc;

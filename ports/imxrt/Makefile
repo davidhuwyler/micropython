@@ -210,6 +210,7 @@ SRC_C = \
 	pwm.c \
 	mphalport.c \
 	mpthreadport.c \
+	pybthread.c \
 	modmcu.c \
 	modmachine.c \
 	modpyb.c \
@@ -492,7 +493,7 @@ CMSIS_MCU_HDR = mcusdk/$(CMSIS_MCU_UPPER).h
 #	$(Q)$(PYTHON) $(PLLVALUES) -c file:boards/$(BOARD)/stm32$(MCU_SERIES)xx_hal_conf.h > $@
 
 $(BUILD)/modmcu_qstr.h: $(CMSIS_MCU_HDR) make-mcuconst.py | $(HEADER_BUILD)
-	$(ECHO) "Rocky's create modmcu_qstr.h"
+	$(ECHO) "Create modmcu_qstr.h"
 	$(Q)$(PYTHON) make-mcuconst.py -bf --qstr $(GEN_MCUCONST_QSTR) --mpz $(GEN_MCUCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_MCUCONST_HDR)
 	
 $(BUILD)/modmcu.o: $(GEN_MCUCONST_HDR)
