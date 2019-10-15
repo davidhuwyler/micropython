@@ -44,8 +44,14 @@ INC += -I.
 INC += -I..
 INC += -I$(BUILD)
 INC += -I$(USBDEV_DIR)
-INC += -I$(TOP)/lib/
-INC += -I$(TOP)/lib/cmsis/inc
+#INC += -I$(TOP_DIR)/micropython
+INC += -I$(TOP)/py
+#INC += -I$(TOP)/lib
+#INC += -I$(TOP)/lib/oofatfs
+#INC += -I$(TOP)/lib/mp-readline
+INC += -I$(BUILD)
+#INC += -I$(TOP_DIR)/micropython/lib/cmsis/inc
+#INC += -I$(TOP_DIR)/micropython/lib/cmsis/inc
 #INC += -I$(USBHOST_DIR)
 INC += -I$(HAL_DIR)
 INC += -I$(HAL_DIR)/drivers
@@ -77,6 +83,11 @@ CFLAGS += $(INC)
 CFLAGS += $(CFLAGS_CORTEX_M7)
 CFLAGS += -Iboards/$(BOARD)
 CFLAGS += -DMICROPY_HW_VTOR=$(TEXT0_ADDR)
+#Rocky Flags
+#CFLAGS += -DUSB_DEVICE_CONFIG_BUFFER_PROPERTY_CACHEABLE=1
+#CFLAGS += -DFSL_SDK_ENABLE_DRIVER_CACHE_CONTROL=1
+
+CFLAGS += -DSDRAM_MPU_INIT=1
 
 ifeq ($(MICROPY_FLOAT_IMPL),double)
 CFLAGS += -DMICROPY_FLOAT_IMPL=MICROPY_FLOAT_IMPL_DOUBLE

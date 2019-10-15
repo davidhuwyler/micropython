@@ -43,7 +43,7 @@
 #include "clock_config.h"
 #include "fsl_common.h"
 #include "fsl_gpio.h"
-
+#include "MIMXRT1052.h"
 
 /*******************************************************************************
  * Definitions
