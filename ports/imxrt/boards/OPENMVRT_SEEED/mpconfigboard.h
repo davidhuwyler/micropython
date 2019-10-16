@@ -13,6 +13,10 @@
 #define MICROPY_HW_ENABLE_CAN       (0)
 #define MICROPY_MW_ENABLE_SWIM		(0)
 
+#define MICROPY_HW_HAS_QSPI_FLASH	(1)
+#define MICROPY_HW_HAS_HYPER_FLASH	(0)
+
+
 //SeeedStudio RGB LED
 #define MICROPY_HW_LED1             (pin_AD_B0_09) // red   GPIO_AD_B0_09
 #define MICROPY_HW_LED2             (pin_AD_B0_10) // green GPIO_AD_B0_10
