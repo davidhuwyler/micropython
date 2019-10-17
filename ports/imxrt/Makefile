@@ -81,6 +81,11 @@ CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM
 
 CFLAGS += $(INC)
 CFLAGS += $(CFLAGS_CORTEX_M7)
+
+CFLAGS += -DXIP_BOOT_HEADER_ENABLE=1
+CFLAGS += -DXIP_BOOT_HEADER_DCD_ENABLE=1
+CFLAGS += -DXIP_EXTERNAL_FLASH=1
+
 CFLAGS += -Iboards/$(BOARD)
 CFLAGS += -DMICROPY_HW_VTOR=$(TEXT0_ADDR)
 #Rocky Flags
@@ -204,6 +209,7 @@ DRIVERS_SRC_C = $(addprefix drivers/,\
 	)
 
 SRC_C = \
+	main.c \
 	adc.c \
 	bufhelper.c \
 	dcmc.c \
@@ -212,6 +218,7 @@ SRC_C = \
 	fatfs_port.c \
 	flash_pgm.c \
 	flash_hyper.c \
+	flash_QuadSpi.c \
 	hal_wrapper.c \
 	pin.c \
 	pin_defs_mcu.c \
@@ -461,6 +468,11 @@ GEN_PINS_AF_PY = $(BUILD)/pins_af.py
 INSERT_USB_IDS = $(TOP)/tools/insert-usb-ids.py
 FILE2H = $(TOP)/tools/file2h.py
 
+USB_IDS_FILE = usb_app.h
+CDCINF_TEMPLATE = pybcdc.inf_template
+GEN_CDCINF_FILE = $(HEADER_BUILD)/pybcdc.inf
+GEN_CDCINF_HEADER = $(HEADER_BUILD)/pybcdc_inf.h
+
 # List of sources for qstr extraction
 SRC_QSTR += $(SRC_C) $(SRC_MOD) $(SRC_LIB) $(EXTMOD_SRC_C)
 # Append any auto-generated sources that are needed by sources listed in
@@ -514,8 +526,12 @@ $(HEADER_BUILD)/%_const.h $(BUILD)/%_qstr.h: $(CMSIS_MCU_HDR) make-mcuconst.py |
 	$(ECHO) "Create mcuconst $@"
 	$(Q)$(PYTHON) make-mcuconst.py --qstr $(GEN_MCUCONST_QSTR) --mpz $(GEN_MCUCONST_MPZ) $(CMSIS_MCU_HDR) > $(GEN_MCUCONST_HDR)
 
-$(GEN_CDCINF_HEADER): $(FILE2H) | $(HEADER_BUILD)
-	$(ECHO) "GEN $@"
+$(GEN_CDCINF_HEADER): $(GEN_CDCINF_FILE) $(FILE2H) | $(HEADER_BUILD)
+	$(ECHO) "Create $@"
 	$(Q)$(PYTHON) $(FILE2H) $< > $@
+
+$(GEN_CDCINF_FILE): $(CDCINF_TEMPLATE) $(INSERT_USB_IDS) $(USB_IDS_FILE) | $(HEADER_BUILD)
+	$(ECHO) "Create $@"
+	$(Q)$(PYTHON) $(INSERT_USB_IDS) $(USB_IDS_FILE) $< > $@
 
 include $(TOP)/py/mkrules.mk

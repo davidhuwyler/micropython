@@ -1,7 +1,8 @@
 #ifndef _FLASH_HYPER_H_
 #define _FLASH_HYPER_H_
 
-#if MICROPY_HW_HAS_HYPER_FLASH == 1
+#include "mpconfigport.h"
+#if MICROPY_HW_HAS_HYPER_FLASH
 
 #include "fsl_flexspi.h"
 int flexspi_nor_init(void);

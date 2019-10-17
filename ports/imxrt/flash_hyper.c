@@ -1,4 +1,6 @@
-#if MICROPY_HW_HAS_HYPER_FLASH == 1
+
+#include "mpconfigport.h"
+#if MICROPY_HW_HAS_HYPER_FLASH
 
 #include "fsl_flexspi.h"
 #include "fsl_debug_console.h"

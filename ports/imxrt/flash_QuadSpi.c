@@ -6,11 +6,11 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+#include "mpconfigport.h"
 
-#if MICROPY_HW_HAS_QSPI_FLASH == 1
+#if MICROPY_HW_HAS_QSPI_FLASH
  
 #include "fsl_flexspi.h"
-#include "app.h"
 #include "fsl_debug_console.h"
 #include "fsl_cache.h"
 
@@ -21,10 +21,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
- /*******************************************************************************
- * Definitions
- ******************************************************************************/
-/*${macro:start}*/
+
 #define EXAMPLE_FLEXSPI FLEXSPI
 #define FLASH_SIZE 0x2000 /* 64Mb/KByte */
 #define EXAMPLE_FLEXSPI_AMBA_BASE FlexSPI_AMBA_BASE
@@ -54,14 +51,6 @@
 #define FLASH_BUSY_STATUS_OFFSET 0
 #define FLASH_ERROR_STATUS_MASK 0x0e
 
-/*${macro:end}*/
-
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
-/*******************************************************************************
- * Definitions
- ******************************************************************************/
 #define EXAMPLE_FLEXSPI FLEXSPI
 #define FLASH_SIZE 0x2000 /* 64Mb/KByte */
 #define EXAMPLE_FLEXSPI_AMBA_BASE FlexSPI_AMBA_BASE
@@ -90,19 +79,6 @@
 #define FLASH_BUSY_STATUS_POL 1
 #define FLASH_BUSY_STATUS_OFFSET 0
 #define FLASH_ERROR_STATUS_MASK 0x0e
-
-/*${macro:end}*/
-
-
-/*******************************************************************************
- * Prototypes
- ******************************************************************************/
-
-/*******************************************************************************
- * Variables
- ******************************************************************************/
-static uint8_t s_nor_program_buffer[256];
-static uint8_t s_nor_read_buffer[256];
 
 /*******************************************************************************
  * Functions
@@ -359,37 +335,6 @@ status_t flexspi_nor_erase_chip(FLEXSPI_Type *base)
     return status;
 }
 
-void flexspi_nor_flash_init(FLEXSPI_Type *base)
-{
-    flexspi_config_t config;
-
-    flexspi_clock_init();
-
-    /*Get FLEXSPI default settings and configure the flexspi. */
-    FLEXSPI_GetDefaultConfig(&config);
-
-    /*Set AHB buffer size for reading data through AHB bus. */
-    config.ahbConfig.enableAHBPrefetch    = true;
-    config.ahbConfig.enableAHBBufferable  = true;
-    config.ahbConfig.enableReadAddressOpt = true;
-    config.ahbConfig.enableAHBCachable    = true;
-    config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;
-    FLEXSPI_Init(base, &config);
-
-    /* Configure flash settings according to serial flash feature. */
-    FLEXSPI_SetFlashConfig(base, &deviceconfig, kFLEXSPI_PortA1);
-
-    /* Update LUT table. */
-    FLEXSPI_UpdateLUT(base, 0, customLUT, CUSTOM_LUT_LENGTH);
-
-    /* Do software reset. */
-    FLEXSPI_SoftwareReset(base);
-}
-
-
-/*******************************************************************************
- * Code
- ******************************************************************************/
 flexspi_device_config_t deviceconfig = {
     .flexspiRootClk       = 133000000,
     .flashSize            = FLASH_SIZE,
@@ -478,6 +423,57 @@ const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
 };
 
 
+int flexspi_nor_init(void)
+{
+    uint8_t vendorID = 0;
+    status_t status;
+    flexspi_config_t config;
+
+    flexspi_clock_init();
+
+    SCB_DisableDCache();
+
+    /*Get FLEXSPI default settings and configure the flexspi. */
+    FLEXSPI_GetDefaultConfig(&config);
+
+    /*Set AHB buffer size for reading data through AHB bus. */
+    config.ahbConfig.enableAHBPrefetch    = true;
+    config.ahbConfig.enableAHBBufferable  = true;
+    config.ahbConfig.enableReadAddressOpt = true;
+    config.ahbConfig.enableAHBCachable    = true;
+    config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;
+    FLEXSPI_Init(EXAMPLE_FLEXSPI, &config);
+
+    /* Configure flash settings according to serial flash feature. */
+    FLEXSPI_SetFlashConfig(EXAMPLE_FLEXSPI, &deviceconfig, kFLEXSPI_PortA1);
+
+    /* Update LUT table. */
+    FLEXSPI_UpdateLUT(EXAMPLE_FLEXSPI, 0, customLUT, CUSTOM_LUT_LENGTH);
+
+    /* Do software reset. */
+    FLEXSPI_SoftwareReset(EXAMPLE_FLEXSPI);
+
+    /* Get vendor ID. */
+    status = flexspi_nor_get_vendor_id(EXAMPLE_FLEXSPI, &vendorID);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+    PRINTF("Vendor ID: 0x%x\r\n", vendorID);
+
+    /* Enter quad mode. */
+    status = flexspi_nor_enable_quad_mode(EXAMPLE_FLEXSPI);
+    if (status != kStatus_Success)
+    {
+        return status;
+    }
+
+	SCB_EnableDCache();
+	//SetFlexSPIDiv(DIV_READ);
+	return 0;
+}
+
+#if 0
 int main(void)
 {
     uint32_t i = 0;
@@ -577,5 +573,5 @@ int main(void)
     {
     }
 }
-
+#endif //0
 #endif //MICROPY_HW_HAS_QSPI_FLASH

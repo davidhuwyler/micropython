@@ -1,11 +1,16 @@
 #include "flash_hyper.h"
+#include "flash_QuadSpi.h"
 #include "flegftl.h"
 #include "flash_pgm.h"
 #include "overlay_manager.h"
+#include "fsl_common.h"
 
 #ifndef   __WEAK
   #define __WEAK                                 __attribute__((weak))
 #endif
+
+__WEAK status_t flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address) {return -1;}
+__WEAK status_t flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t dstAddr, const uint32_t *src) {return -1;}
 
 int HyperErase(int euNdx) {
 	OVERLAY_SWITCH();
