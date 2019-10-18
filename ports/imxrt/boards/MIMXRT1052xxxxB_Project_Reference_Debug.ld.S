@@ -379,9 +379,9 @@ Stack
 /*---------------------------------------------------------------------------------
 OpenMV (Framebuffer...
 ---------------------------------------------------------------------------------*/
-  /*FrameBuffer in Ext.SDRAM: */
-  FB_SIZE  = 100*1024;
-  FB_ALLOC_SIZE = 100*1024;
+  /*FrameBuffer*/
+  FB_SIZE  = 1*1024;
+  FB_ALLOC_SIZE = 1*1024;
   .frameBuffers :
   {
     . = ALIGN(8);
@@ -389,16 +389,22 @@ OpenMV (Framebuffer...
 	. += FB_SIZE + FB_ALLOC_SIZE;
 	/* fb_alloc is at the end of FB (with margin) */
 	_ld_fballoc = .;
-  } > BOARD_SDRAM
+  } > SRAM_DTC
 
-  /*FrameBuffer in SRAM_DTC (uncached): */
-  JPEG_SIZE  = 50*1024;
+  /*JPEG Framebuffer*/
+  JPEG_SIZE  = 30*1024;
   .jpegFb :
   {
     . = ALIGN(4);
 	_ld_jpeg_buf = .;
 	. += JPEG_SIZE;
   } > SRAM_DTC
+
+  /*LCD Framebuffer*/
+  .dramncache :
+  {
+	*.o (.lcd_fb)
+  } > BOARD_SDRAM
 
 
 }
