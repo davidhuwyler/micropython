@@ -30,12 +30,6 @@
 
 #define MICROPY_HW_I2C_BAUDRATE_MAX	(1000*1000)
 
-// I2C busses
-
-#define MICROPY_HW_I2C3_NAME "i2c3"
-#define MICROPY_HW_I2C3_SDA (pin_EMC_21)
-#define MICROPY_HW_I2C3_SCL (pin_EMC_22)
-
 typedef enum {
 	PYB_I2C_0 = 0,
     PYB_I2C_1 = 1,

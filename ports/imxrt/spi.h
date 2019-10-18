@@ -29,25 +29,6 @@
 
 #include "dma.h"
 
-#define MICROPY_HW_SPI1_NAME "spi1"
-#define MICROPY_HW_SPI1_NSS  (pin_EMC_30)
-#define MICROPY_HW_SPI1_SCK  (pin_EMC_27) // 
-#define MICROPY_HW_SPI1_MISO (pin_EMC_29) // 
-#define MICROPY_HW_SPI1_MOSI (pin_EMC_28) // 
-/*for our new use, we have only one interface of spi in our new board, so we write only one defination of the spi pin above for the easy use
-#define MICROPY_HW_SPI7_NAME "spi7"
-#define MICROPY_HW_SPI7_NSS  (pin_122) // use GPIO
-#define MICROPY_HW_SPI7_SCK  (pin_218) // J9_16
-#define MICROPY_HW_SPI7_MISO (pin_220) // J9_18
-#define MICROPY_HW_SPI7_MOSI (pin_219) // J9_20
-
-
-#define MICROPY_HW_SPI9_NAME "spi9"
-#define MICROPY_HW_SPI9_NSS  (pin_330) // use GPIO
-#define MICROPY_HW_SPI9_SCK  (pin_320) // J9_9
-#define MICROPY_HW_SPI9_MISO (pin_322) // J9_11
-#define MICROPY_HW_SPI9_MOSI (pin_321) // J9_13
-*/
 typedef enum {
 	PYB_SPI_0 = 0, // index 0 is not exist on RT10xx!
     PYB_SPI_1 = 1,

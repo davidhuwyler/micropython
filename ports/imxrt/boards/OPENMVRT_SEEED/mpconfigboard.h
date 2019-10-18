@@ -17,7 +17,7 @@
 #define MICROPY_HW_HAS_HYPER_FLASH	(0)
 
 
-//SeeedStudio RGB LED
+// RGB LED
 #define MICROPY_HW_LED1             (pin_AD_B0_09) // red   GPIO_AD_B0_09
 #define MICROPY_HW_LED2             (pin_AD_B0_10) // green GPIO_AD_B0_10
 #define MICROPY_HW_LED3             (pin_AD_B0_11) // blue  GPIO_AD_B0_11
@@ -33,3 +33,23 @@
 #define MICROPY_HW_USRSW_PULL       (1) //(GPIO_PULLUP)
 #define MICROPY_HW_USRSW_EXTI_MODE  (2) //(GPIO_MODE_IT_FALLING)
 #define MICROPY_HW_USRSW_PRESSED    (0)
+
+// SPI
+#define MICROPY_HW_SPI4_NAME "spi4"
+#define MICROPY_HW_SPI4_NSS  (pin_B1_04)
+#define MICROPY_HW_SPI4_SCK  (pin_B1_07)
+#define MICROPY_HW_SPI4_MISO (pin_B1_05)
+#define MICROPY_HW_SPI4_MOSI (pin_B1_06)
+
+// I2C
+#define MICROPY_HW_I2C1_NAME "i2c1"
+#define MICROPY_HW_I2C1_SDA (pin_B1_00)
+#define MICROPY_HW_I2C1_SCL (pin_B1_01)
+
+// UART
+#define MICROPY_HW_UART1_NAME   "uart1"
+#define MICROPY_HW_UART1_RX     (pin_AD_B0_13)
+#define MICROPY_HW_UART1_TX     (pin_AD_B0_12)
+#define MICROPY_HW_UART1_ALT	2
+
+

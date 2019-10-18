@@ -221,6 +221,7 @@ SRC_C = \
 	dcmc.c \
 	irq.c \
 	isr.c \
+	i2c.c \
 	fatfs_port.c \
 	flash_pgm.c \
 	flash_hyper.c \
@@ -245,6 +246,7 @@ SRC_C = \
 	rpm.c \
 	rng.c \
 	rtc.c \
+	spi.c \
 	srpm.c \
 	tmr.c \
 	qtimer.c \
