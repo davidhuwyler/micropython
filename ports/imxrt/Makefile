@@ -315,8 +315,8 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	video/fsl_sccb.c \
 	video/fsl_ov7725.c \
 	video/fsl_video_common.c \
-	xip/evkmimxrt1050_flexspi_nor_config.c \
-	xip/evkmimxrt1050_sdram_ini_dcd.c \
+	xip/evkmimxrt1020_flexspi_nor_config.c \
+	xip/evkbimxrt1050_sdram_ini_dcd.c \
 	xip/fsl_flexspi_nor_boot.c \
 	)	
 
