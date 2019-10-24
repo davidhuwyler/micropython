@@ -71,6 +71,7 @@ INC += -I$(HAL_DIR)/usb/device/source/khci
 INC += -I$(HAL_DIR)/osa
 INC += -I$(HAL_DIR)/video
 INC += -I$(HAL_DIR)/sdmmc
+INC += -I$(HAL_DIR)/xip
 INC += -Iflegftl
 INC += -Iusb_misc
 
@@ -314,6 +315,9 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	video/fsl_sccb.c \
 	video/fsl_ov7725.c \
 	video/fsl_video_common.c \
+	xip/evkmimxrt1050_flexspi_nor_config.c \
+	xip/evkmimxrt1050_sdram_ini_dcd.c \
+	xip/fsl_flexspi_nor_boot.c \
 	)	
 
 	

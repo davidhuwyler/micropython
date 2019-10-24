@@ -339,7 +339,7 @@ NOINIT in all memo Sections
 Heap
 ---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map */
-    _HeapSize = 0x4000;
+    _HeapSize = 0xA000;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;
@@ -351,7 +351,7 @@ Heap
 /*---------------------------------------------------------------------------------
 Stack
 ---------------------------------------------------------------------------------*/
-     _StackSize = 0x2000;
+     _StackSize = 0x4000;
      /* Reserve space in memory for Stack */
     .heap2stackfill  :
     {
@@ -380,8 +380,8 @@ Stack
 OpenMV (Framebuffer...
 ---------------------------------------------------------------------------------*/
   /*FrameBuffer*/
-  FB_SIZE  = 1*1024;
-  FB_ALLOC_SIZE = 1*1024;
+  FB_SIZE  = 200*1024;
+  FB_ALLOC_SIZE = 50*1024;
   .frameBuffers :
   {
     . = ALIGN(8);
@@ -389,7 +389,7 @@ OpenMV (Framebuffer...
 	. += FB_SIZE + FB_ALLOC_SIZE;
 	/* fb_alloc is at the end of FB (with margin) */
 	_ld_fballoc = .;
-  } > SRAM_DTC
+  } > SRAM_OC
 
   /*JPEG Framebuffer*/
   JPEG_SIZE  = 30*1024;
@@ -405,6 +405,12 @@ OpenMV (Framebuffer...
   {
 	*.o (.lcd_fb)
   } > BOARD_SDRAM
+
+  /*LCD Framebuffer*/
+  .jpegTable :
+  {
+	*.o (.jpeg_tab)
+  } > SRAM_DTC
 
 
 }
