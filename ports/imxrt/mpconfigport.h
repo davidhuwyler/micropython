@@ -169,9 +169,9 @@ extern const struct _mp_obj_module_t time_module;
 //extern const struct _mp_obj_module_t lcd_module;
 #ifndef OMV_MPY_ONLY
 extern const struct _mp_obj_module_t sensor_module;
-//extern const struct _mp_obj_module_t image_module;
-//extern const struct _mp_obj_module_t mjpeg_module;
-//extern const struct _mp_obj_module_t nn_module;
+extern const struct _mp_obj_module_t image_module;
+extern const struct _mp_obj_module_t mjpeg_module;
+extern const struct _mp_obj_module_t nn_module;
 //extern const struct _mp_obj_module_t gif_module;
 #endif
 
@@ -225,6 +225,9 @@ extern const struct _mp_obj_module_t sensor_module;
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_utime), (mp_obj_t)&mp_module_utime }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_time), (mp_obj_t)&time_module }, \
 	{ MP_OBJ_NEW_QSTR(MP_QSTR_sensor),  (mp_obj_t)&sensor_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_image),  (mp_obj_t)&image_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_mjpeg),  (mp_obj_t)&mjpeg_module }, \
+	{ MP_OBJ_NEW_QSTR(MP_QSTR_nn),  (mp_obj_t)&nn_module }, \
 	SOCKET_BUILTIN_MODULE \
 	NETWORK_BUILTIN_MODULE
 #else
