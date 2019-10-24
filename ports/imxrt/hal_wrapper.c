@@ -18,11 +18,10 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 
 void HAL_WFI(void)
 {
-	__WFI();
-//	#ifndef MCU_SERIES_RT106
-//	__WFI();
-//	#else
-//	#endif
+	__asm volatile("wfi");
+
+	//__WFI();
+
 }
 
 __weak void HAL_IncTick(void)

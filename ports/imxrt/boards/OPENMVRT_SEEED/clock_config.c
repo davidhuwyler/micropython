@@ -108,4 +108,6 @@ void BOARD_BootClockRUN(void)
 
     /* Update core clock */
     SystemCoreClockUpdate();
+
+    CLOCK_SetMode(kCLOCK_ModeRun);
 }

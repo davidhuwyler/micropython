@@ -228,6 +228,7 @@ DataTightCoupledMemory RAM:  (SRAM_DTC)
        *(vtable)
        *(.ramfunc*)
        *(.data*)
+       *(.jpeg_tab)
        . = ALIGN(4) ;
        _edata = . ;
     } > SRAM_DTC AT>BOARD_FLASH
@@ -406,11 +407,11 @@ OpenMV (Framebuffer...
 	*.o (.lcd_fb)
   } > BOARD_SDRAM
 
-  /*LCD Framebuffer*/
+  /*LCD Framebuffer /*Moved to > BOARD_SDRAM AT>BOARD_FLASH
   .jpegTable :
   {
 	*.o (.jpeg_tab)
-  } > SRAM_DTC
+  } > SRAM_DTC */
 
 
 }
