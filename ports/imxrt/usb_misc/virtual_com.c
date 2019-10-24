@@ -193,8 +193,7 @@ void CheckVCOMConnect(void) {
 		RingBlk_Init(&s_omvRB, s_omvTxBuf[0], VCP_RINGBLK_SIZE, sizeof(s_omvTxBuf) / VCP_RINGBLK_SIZE);
 		g_isUsbHostOpen = 1;
 		dbg_xfer_length = 0;
-		//TODO Dave: Reenable usbdbg
-		//usbdbg_connect();
+		usbdbg_connect();
 		// UserTxBufPtrIn = UserTxBufPtrOut = UserTxBufPtrOutShadow = 0;
 	} else {
 		debug_mode = 0;
@@ -483,8 +482,7 @@ usb_status_t USB_DeviceCdcVcomCallback(class_handle_t handle, uint32_t event, vo
             if (acmInfo->dteStatus & USB_DEVICE_CDC_CONTROL_SIG_BITMAP_CARRIER_ACTIVATION)
             {
                 /*  To do: CARRIER_ACTIVATED */
-            	//TODO Dave: reenable usbdbg
-				//usbdbg_disconnect();
+				usbdbg_disconnect();
 				g_isUsbHostOpen = 0;
 				debug_mode = 0;
             }
