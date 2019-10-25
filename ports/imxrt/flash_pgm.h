@@ -1,7 +1,7 @@
 #ifndef _FLASH_PGM_H_
 #define _FLASH_PGM_H_
 
-#ifdef XIP_EXTERNAL_FLASH
+#if 0 //#ifdef XIP_EXTERNAL_FLASH
 #define OVERLAY_SWITCH()	int oldOvly = OverlaySwitch(OVLY_FLASHPGM)
 #define OVERLAY_RESTORE()	OverlaySwitch(oldOvly)
 #else
