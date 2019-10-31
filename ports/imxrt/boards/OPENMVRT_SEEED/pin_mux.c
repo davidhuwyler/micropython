@@ -473,6 +473,14 @@ IOMUXC_SetPinMux(
                                                  Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
 	  
+
+  //DebugPin EMC_41  (Name=ENET_MDIO)
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_EMC_41_GPIO3_IO27,
+      0U);
+  IOMUXC_SetPinConfig(
+		  IOMUXC_GPIO_EMC_41_GPIO3_IO27,
+      0x017089u);
 }
 /*******************************************************************************
  * EOF
