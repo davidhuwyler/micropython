@@ -412,8 +412,6 @@ OpenMV (Framebuffer...
   {
 	*.o (.jpeg_tab)
   } > SRAM_DTC */
-
-
 }
 
   /*TODO Dave: Define proper variables... & Memomap*/

@@ -43,8 +43,8 @@
 
 // I2C
 #define MICROPY_HW_I2C1_NAME "i2c1"
-#define MICROPY_HW_I2C1_SDA (pin_AD_B1_00)
-#define MICROPY_HW_I2C1_SCL (pin_AD_B1_01)
+#define MICROPY_HW_I2C1_SDA (pin_AD_B1_01)
+#define MICROPY_HW_I2C1_SCL (pin_AD_B1_00)
 
 // UART
 #define MICROPY_HW_UART1_NAME   "uart1"
