@@ -10,6 +10,8 @@
 // SPDX-License-Identifier: BSD-3-Clause
 //*****************************************************************************
 
+//#include "fsl_flexram.h"
+
 #if defined (DEBUG)
 #pragma GCC push_options
 #pragma GCC optimize ("Og")
@@ -621,6 +623,26 @@ extern unsigned int __data_section_table_end;
 extern unsigned int __bss_section_table;
 extern unsigned int __bss_section_table_end;
 
+
+//Reconfigures the FLEXRAM:
+//Information about FLEXRAM Config: AN12077.pdf
+//-->128k (4 banks a 32k)ITCM (needs to be a power of 2)
+//-->256k  (8 banks a 32k)DTCM (needs to be a power of 2)
+//-->128k  (4 banks a 32k)OC (min 64k)
+/*
+void ConfigFlexRAM(void)
+{
+    flexram_allocate_ram_t ramAllocate = {
+        .ocramBankNum = 4,
+        .dtcmBankNum  = 8,
+        .itcmBankNum  = 4,
+    };
+    //EnableIRQ(FLEXRAM_IRQn);
+    FLEXRAM_AllocateRam(&ramAllocate);
+    //FLEXRAM_Init(FLEXRAM);
+}*/
+
+
 //*****************************************************************************
 // Reset entry point for your code.
 // Sets up a simple runtime environment and initializes the C/C++
@@ -651,6 +673,8 @@ void ResetISR(void) {
     *RTWDOG_CS = (*RTWDOG_CS & ~(1 << 7)) | (1 << 5);
 
 #endif // (__USE_CMSIS)
+
+    //ConfigFlexRAM();
 
     //
     // Copy the data sections from flash to SRAM.

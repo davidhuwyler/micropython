@@ -293,6 +293,7 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_elcdif.c \
 	fsl_csi.c \
 	fsl_lpi2c.c \
+	fsl_flexram.c \
 	)
 	
 SRC_HAL += $(addprefix $(HAL_DIR)/, \

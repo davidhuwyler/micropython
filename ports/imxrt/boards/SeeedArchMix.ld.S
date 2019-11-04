@@ -22,7 +22,6 @@ GROUP (
   "libm.a"
 )
 
-
 /*
 INCLUDE "MIMXRT1052xxxxB_Project_Test_Debug_memory.ld"
 */
@@ -340,7 +339,7 @@ NOINIT in all memo Sections
 Heap
 ---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map  40k */
-    _HeapSize = 40 * 1024;
+    _HeapSize = 80 * 1024;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;
@@ -399,7 +398,7 @@ OpenMV (Framebuffer...
     . = ALIGN(4);
 	_ld_jpeg_buf = .;
 	. += JPEG_SIZE;
-  } > SRAM_DTC
+  } > SRAM_OC
 
   /*LCD Framebuffer*/
   .dramncache :
