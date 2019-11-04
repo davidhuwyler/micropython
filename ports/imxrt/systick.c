@@ -111,8 +111,7 @@ void systick_sleep(volatile uint32_t ms)
 {
     volatile uint32_t curr_ticks = HAL_GetTick();
     while ((HAL_GetTick() - curr_ticks) < ms) {
-        // rocky: it shouldn't be, but WFI makes J-Link debug session broken on OMVRT1 board
-		HAL_WFI();
+ 		HAL_WFI();
     }
 }
 
