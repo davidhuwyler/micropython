@@ -125,10 +125,7 @@ ExternalFlash:  (BOARD_FLASH)
 
     .text : ALIGN(4)
     {
-        /**(.text*)*/
-
-       *(EXCLUDE_FILE(*flash_QuadSpi.o  *fsl_flexspi.o).text .text*)  /* .text and .text* sections (code) */
-
+       *(.text*)
        *(.rodata .rodata.* .constdata .constdata.*)
        . = ALIGN(4);
     } > BOARD_FLASH
@@ -156,13 +153,10 @@ ExternalFlash:  (BOARD_FLASH)
 InstructionTightCoupledMemory:  (SRAM_ITC)
 ---------------------------------------------------------------------------------*/
     /* DATA section for SRAM_ITC */
-
     .data_RAM2 : ALIGN(4)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM2 = .) ;
-        *flash_QuadSpi.o (.text .text*)
-        *fsl_flexspi.o (.text .text*)
         *(.ramfunc.$RAM2)
         *(.ramfunc.$SRAM_ITC)
         *(.data.$RAM2)
