@@ -18,6 +18,12 @@
 #include "board.h"
 #include "clock_config.h"
 #include "fsl_common.h"
+
+#ifndef RAM_CODE
+#define RAM_CODE __attribute__((section(".ramfunc.$SRAM_ITC")))
+//#define RAM_CODE
+#endif
+
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -353,7 +359,7 @@ flexspi_device_config_t deviceconfig = {
     .AHBWriteWaitInterval = 0,
 };
 
-const uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
+const RAM_CODE uint32_t customLUT[CUSTOM_LUT_LENGTH] = {
     /* Normal read mode -SDR */
     /* Normal read mode -SDR */
     [4 * NOR_CMD_LUT_SEQ_IDX_READ_NORMAL] =

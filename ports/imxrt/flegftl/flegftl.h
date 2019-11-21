@@ -210,12 +210,8 @@ int FLEG_Init(FlegDevice_t *pDev, FlegDeviceMetrics_t *pMetrics,
 	pfnFlegErase_t pfnErs, pfnFlegPageProgram_t pfnPgPgm,
 	pfnFleg16bitProgram_t pfn16bitPgm, pfnFlegRead_t pfnRead, pfnFlegFlush_t pfnFlush);
 
-
-
 int FLEG_PageRead(FlegDevice_t *pDev, uint32_t lpu, void *pvBuf);
 int FLEG_PageWrite(FlegDevice_t *pDev, uint32_t lpu, const void *pcvBuf);
-
-
 
 #define FLEG_GET_FIELD_OFS(fld, _t) (uint32_t)(&((_t*)0)->fld)
 #define FLEG_L3BmSetBit FLEG_L3BmFree

@@ -29,9 +29,9 @@ MEMORY
 {
   /* Define each memory region */
   BOARD_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 0x800000 /* 8M bytes (alias Flash) */  
-  SRAM_DTC (rwx) : ORIGIN = 0x20000000, LENGTH = 0x20000 /* 128K bytes (alias RAM) */  
+  SRAM_DTC (rwx) : ORIGIN = 0x20000000, LENGTH = 0x20000 /* 128K bytes (alias RAM) */
   SRAM_ITC (rwx) : ORIGIN = 0x0, LENGTH = 0x20000 /* 128K bytes (alias RAM2) */  
-  SRAM_OC (rwx) : ORIGIN = 0x20200000, LENGTH = 0x40000 /* 256K bytes (alias RAM3) */  
+  SRAM_OC (rwx) : ORIGIN = 0x20200000, LENGTH = 0x40000 /* 256K bytes (alias RAM3) */
   BOARD_SDRAM (rwx) : ORIGIN = 0x80000000, LENGTH = 0x2000000 /* 32M bytes (alias RAM4) */  
 }
 
@@ -42,21 +42,20 @@ MEMORY
   __top_Flash = 0x60000000 + 0x800000 ; /* 8M bytes */  
   __base_SRAM_DTC = 0x20000000  ; /* SRAM_DTC */  
   __base_RAM = 0x20000000 ; /* RAM */  
-  __top_SRAM_DTC = 0x20000000 + 0x20000 ; /* 128K bytes */  
-  __top_RAM = 0x20000000 + 0x20000 ; /* 128K bytes */  
+  __top_SRAM_DTC = 0x20000000 + 0x20000 ; /* 128K bytes */
+  __top_RAM = 0x20000000 + 0x20000 ; /* 128K bytes */
   __base_SRAM_ITC = 0x0  ; /* SRAM_ITC */  
   __base_RAM2 = 0x0 ; /* RAM2 */  
   __top_SRAM_ITC = 0x0 + 0x20000 ; /* 128K bytes */  
   __top_RAM2 = 0x0 + 0x20000 ; /* 128K bytes */  
   __base_SRAM_OC = 0x20200000  ; /* SRAM_OC */  
   __base_RAM3 = 0x20200000 ; /* RAM3 */  
-  __top_SRAM_OC = 0x20200000 + 0x40000 ; /* 256K bytes */  
-  __top_RAM3 = 0x20200000 + 0x40000 ; /* 256K bytes */  
+  __top_SRAM_OC = 0x20200000 + 0x40000 ; /* 256K bytes */
+  __top_RAM3 = 0x20200000 + 0x40000 ; /* 256K bytes */
   __base_BOARD_SDRAM = 0x80000000  ; /* BOARD_SDRAM */  
   __base_RAM4 = 0x80000000 ; /* RAM4 */  
   __top_BOARD_SDRAM = 0x80000000 + 0x2000000 ; /* 32M bytes */  
   __top_RAM4 = 0x80000000 + 0x2000000 ; /* 32M bytes */  
-
 /*
 Rest:
 */
@@ -126,7 +125,10 @@ ExternalFlash:  (BOARD_FLASH)
 
     .text : ALIGN(4)
     {
-       *(.text*)
+        /**(.text*)*/
+
+       *(EXCLUDE_FILE(*flash_QuadSpi.o  *fsl_flexspi.o).text .text*)  /* .text and .text* sections (code) */
+
        *(.rodata .rodata.* .constdata .constdata.*)
        . = ALIGN(4);
     } > BOARD_FLASH
@@ -159,6 +161,8 @@ InstructionTightCoupledMemory:  (SRAM_ITC)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM2 = .) ;
+        *flash_QuadSpi.o (.text .text*)
+        *fsl_flexspi.o (.text .text*)
         *(.ramfunc.$RAM2)
         *(.ramfunc.$SRAM_ITC)
         *(.data.$RAM2)
@@ -338,7 +342,7 @@ NOINIT in all memo Sections
 /*---------------------------------------------------------------------------------
 Heap
 ---------------------------------------------------------------------------------*/
-    /* Reserve and place Heap within memory map  40k */
+    /* Reserve and place Heap within memory map  70k */
     _HeapSize = 70 * 1024;
     .heap :  ALIGN(4)
     {
@@ -379,9 +383,12 @@ Stack
 /*---------------------------------------------------------------------------------
 OpenMV (Framebuffer...
 ---------------------------------------------------------------------------------*/
-  /*FrameBuffer*/
-  FB_SIZE  = 1000*1024;
-  FB_ALLOC_SIZE = 100*1024;
+  /*FrameBuffer BOARD_SDRAM*/
+  /*FB_SIZE  = 1000*1024;
+  FB_ALLOC_SIZE = 100*1024;*/
+
+  FB_SIZE  = 192*1024;
+  FB_ALLOC_SIZE = 32*1024;
   .frameBuffers :
   {
     . = ALIGN(8);

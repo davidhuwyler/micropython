@@ -52,8 +52,6 @@
 #include "i2c.h"
 #include "spi.h"
 #include "uart.h"
-#include "nxp_swim/py_swim.h"
-#include "ay_imu/py_imu.h"
 #include "can.h"
 #include "adc.h"
 #include "storage.h"

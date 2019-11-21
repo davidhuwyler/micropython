@@ -26,7 +26,6 @@
 
 #ifndef _FLASH_H_
 #define _FLASH_H_
-#include "flegftl.h"
 #include "fsl_device_registers.h"
 
 #define FLASH_BASE_ADDR			0x60300000

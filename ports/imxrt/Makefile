@@ -84,7 +84,7 @@ INC += -Iusb_misc
 # Options for particular MCU series
 CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -D__NEWLIB__ -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -D__NEWLIB__ -fstack-usage
 
-CFLAGS += -O3 # Compiler Optimization
+#CFLAGS += -O3 # Compiler Optimization
 
 CFLAGS += $(INC)
 CFLAGS += $(CFLAGS_CORTEX_M7)
@@ -227,6 +227,7 @@ SRC_C = \
 	flash_pgm.c \
 	flash_hyper.c \
 	flash_QuadSpi.c \
+	flegftl/flegftl.c \
 	hal_wrapper.c \
 	pin.c \
 	pin_defs_mcu.c \
@@ -257,7 +258,6 @@ SRC_C = \
 	sdcard.c \
 	gccollect.c \
 	led.c \
-	flegftl/flegftl.c \
 	flash.c \
 	help.c \
 	uart.c \
@@ -268,6 +268,8 @@ SRC_C = \
 	usbd_msc_storage.c \
 	$(STARTUP_FILE) \
 	$(wildcard boards/$(BOARD)/*.c)
+	
+
 	
 SRC_O = \
 	resethandler.o \

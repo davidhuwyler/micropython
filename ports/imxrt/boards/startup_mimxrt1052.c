@@ -10,7 +10,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 //*****************************************************************************
 
-//#include "fsl_flexram.h"
+#include "fsl_flexram.h"
 
 #if defined (DEBUG)
 #pragma GCC push_options
@@ -629,7 +629,7 @@ extern unsigned int __bss_section_table_end;
 //-->128k (4 banks a 32k)ITCM (needs to be a power of 2)
 //-->256k  (8 banks a 32k)DTCM (needs to be a power of 2)
 //-->128k  (4 banks a 32k)OC (min 64k)
-/*
+
 void ConfigFlexRAM(void)
 {
     flexram_allocate_ram_t ramAllocate = {
@@ -640,7 +640,7 @@ void ConfigFlexRAM(void)
     //EnableIRQ(FLEXRAM_IRQn);
     FLEXRAM_AllocateRam(&ramAllocate);
     //FLEXRAM_Init(FLEXRAM);
-}*/
+}
 
 
 //*****************************************************************************
