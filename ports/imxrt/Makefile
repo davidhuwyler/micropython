@@ -44,20 +44,11 @@ INC += -I.
 INC += -I..
 INC += -I$(BUILD)
 INC += -I$(USBDEV_DIR)
-#INC += -I$(TOP_DIR)/micropython
 INC += -I$(TOP)/py
-#INC += -I$(TOP)/lib
-#INC += -I$(TOP)/lib/oofatfs
-#INC += -I$(TOP)/lib/mp-readline
 INC += -I$(BUILD)
-#INC += -I$(TOP_DIR)/micropython/lib/cmsis/inc
-#INC += -I$(TOP_DIR)/micropython/lib/cmsis/inc
-#INC += -I$(USBHOST_DIR)
 INC += -I$(HAL_DIR)
 INC += -I$(HAL_DIR)/drivers
 INC += -I$(HAL_DIR)/utilities
-#INC += -I$(HAL_DIR)/CMSIS
-#INC += -I$(HAL_DIR)/CMSIS_driver
 INC += -I$(HAL_DIR)/component/uart
 INC += -I$(HAL_DIR)/component/serial_manager
 INC += -I$(HAL_DIR)/component/serial_manager/usb_cdc_adapter
@@ -75,16 +66,10 @@ INC += -I$(HAL_DIR)/xip
 INC += -Iflegftl
 INC += -Iusb_misc
 
-#INC += -I$(TOP)/omv
-#INC += -I$(TOP)/omv/py
-#INC += -I$(TOP)/omv/img
-#INC += -I$(TOP)/omv/nn
-
-
 # Options for particular MCU series
 CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -D__NEWLIB__ -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -D__NEWLIB__ -fstack-usage
 
-#CFLAGS += -O3 # Compiler Optimization
+CFLAGS += -O3 # Compiler Optimization
 
 CFLAGS += $(INC)
 CFLAGS += $(CFLAGS_CORTEX_M7)
@@ -321,6 +306,9 @@ SRC_HAL += $(addprefix $(HAL_DIR)/, \
 	xip/evkmimxrt1020_flexspi_nor_config.c \
 	xip/evkbimxrt1050_sdram_ini_dcd.c \
 	xip/fsl_flexspi_nor_boot.c \
+	xip/evkbimxrt1050_flexspi_nor_config_hyper.c \
+	xip/evkbimxrt1050_sdram_ini_dcd_hyper.c \
+	xip/fsl_flexspi_nor_boot_hyper.c \
 	)	
 
 	

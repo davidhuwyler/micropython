@@ -32,6 +32,8 @@
  */
 
 #include "evkmimxrt1020_flexspi_nor_config.h"
+#include "mpconfigboard.h"
+#if MICROPY_HW_HAS_QSPI_FLASH == 1
 
 /*******************************************************************************
  * Code
@@ -68,3 +70,4 @@ const flexspi_nor_config_t qspiflash_config = {
     .isUniformBlockSize = false,
 };
 #endif /* XIP_BOOT_HEADER_ENABLE */
+#endif //MICROPY_HW_HAS_QSPI_FLASH

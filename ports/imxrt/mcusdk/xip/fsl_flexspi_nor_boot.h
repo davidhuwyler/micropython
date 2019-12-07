@@ -36,6 +36,8 @@
 
 #include <stdint.h>
 #include "board.h"
+#include "mpconfigboard.h"
+#if MICROPY_HW_HAS_QSPI_FLASH == 1
 
 /************************************* 
  *  IVT Data 
@@ -128,4 +130,4 @@ const BOOT_DATA_T boot_data;
 extern const uint8_t dcd_data[];
 
 #endif /* __FLEXSPI_NOR_BOOT_H__ */
-
+#endif //MICROPY_HW_HAS_QSPI_FLASH

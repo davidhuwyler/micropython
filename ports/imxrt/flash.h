@@ -28,7 +28,7 @@
 #define _FLASH_H_
 #include "fsl_device_registers.h"
 
-#define FLASH_BASE_ADDR			0x60300000
+#define FLASH_BASE_ADDR			0x60000000
 #define FLASH_KB_SIZE 			(FLEG_CAPACITY / 1024)  // size in KB !
 
 #define FLASH_DISK_BASE_ADDR	0x60400000
@@ -41,8 +41,6 @@ int flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address);
 int flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t address, const uint32_t *src);
 
 void flash_setSysPathToFlashFS(void);
-
-
 
 uint32_t flash_get_sector_info(uint32_t addr, uint32_t *start_addr, uint32_t *size);
 void flash_erase(uint32_t flash_dest, const uint32_t *src, uint32_t num_word32);

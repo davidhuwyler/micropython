@@ -10,7 +10,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 //*****************************************************************************
 
-#include "fsl_flexram.h"
+#include "fsl_device_registers.h"
 
 #if defined (DEBUG)
 #pragma GCC push_options
@@ -623,26 +623,6 @@ extern unsigned int __data_section_table_end;
 extern unsigned int __bss_section_table;
 extern unsigned int __bss_section_table_end;
 
-
-//Reconfigures the FLEXRAM:
-//Information about FLEXRAM Config: AN12077.pdf
-//-->128k (4 banks a 32k)ITCM (needs to be a power of 2)
-//-->256k  (8 banks a 32k)DTCM (needs to be a power of 2)
-//-->128k  (4 banks a 32k)OC (min 64k)
-
-void ConfigFlexRAM(void)
-{
-    flexram_allocate_ram_t ramAllocate = {
-        .ocramBankNum = 4,
-        .dtcmBankNum  = 8,
-        .itcmBankNum  = 4,
-    };
-    //EnableIRQ(FLEXRAM_IRQn);
-    FLEXRAM_AllocateRam(&ramAllocate);
-    //FLEXRAM_Init(FLEXRAM);
-}
-
-
 //*****************************************************************************
 // Reset entry point for your code.
 // Sets up a simple runtime environment and initializes the C/C++
@@ -653,6 +633,35 @@ void ResetISR(void) {
 
     // Disable interrupts
     __asm volatile ("cpsid i");
+
+
+#if 0
+
+    //Reconfigures the FLEXRAM:
+    //-->ITCM: 32k   (1  bank  x 32k)
+    //-->DTCM: 416k  (13 banks x 32k)
+    //-->OC:   64k   (2  banks x 32k) (min. 64k)
+    //
+    //Information about FLEXRAM Config:
+    // IMXRT1050RM.pdf p.340...
+    // AN12077 Using the i.MX RT FlexRAM.pdf
+    // https://community.nxp.com/thread/517877
+
+    uint32_t volatile * const TCM_CTRL = (uint32_t volatile *) 0x400B0000;
+    *(TCM_CTRL) &= 0xFFFFFFF8;
+    *(TCM_CTRL) |= 0x4;
+
+    IOMUXC_GPR->GPR17 = 0x5EAAAAAA; // 64k OC, 32k ITCM, 416 DTCM
+    //(2bits per 32k block, 0b01 = OC, 11 = ITCM, 10 = DTCM)
+    //0x7AAAAAAA = 0b 01 01 11 10 10 10 10 10 10 10 10 10 10 10 10 10 --> 64k OC, 32k ITCM, 416 DTCM
+
+    IOMUXC_GPR->GPR16 |= 0x7; ///0b111 -> Activate DTCM, ITCM and choose config flexram through GPR17
+
+    //Set the Max. Possible values of ITCM & DTCM
+    IOMUXC_GPR->GPR14 |= (0xA <<20);
+    IOMUXC_GPR->GPR14 |= (0xA <<16);
+
+#endif
 
 
 #if defined (__USE_CMSIS)
@@ -673,8 +682,6 @@ void ResetISR(void) {
     *RTWDOG_CS = (*RTWDOG_CS & ~(1 << 7)) | (1 << 5);
 
 #endif // (__USE_CMSIS)
-
-    //ConfigFlexRAM();
 
     //
     // Copy the data sections from flash to SRAM.

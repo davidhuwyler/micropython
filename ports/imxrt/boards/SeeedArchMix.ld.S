@@ -30,7 +30,7 @@ MEMORY
   /* Define each memory region */
   BOARD_FLASH (rx) : ORIGIN = 0x60000000, LENGTH = 0x800000 /* 8M bytes (alias Flash) */  
   SRAM_DTC (rwx) : ORIGIN = 0x20000000, LENGTH = 0x20000 /* 128K bytes (alias RAM) */
-  SRAM_ITC (rwx) : ORIGIN = 0x0, LENGTH = 0x20000 /* 128K bytes (alias RAM2) */  
+  SRAM_ITC (rwx) : ORIGIN = 0x0, LENGTH = 0x20000 /* 128K bytes (alias RAM2) */
   SRAM_OC (rwx) : ORIGIN = 0x20200000, LENGTH = 0x40000 /* 256K bytes (alias RAM3) */
   BOARD_SDRAM (rwx) : ORIGIN = 0x80000000, LENGTH = 0x2000000 /* 32M bytes (alias RAM4) */  
 }
@@ -46,8 +46,8 @@ MEMORY
   __top_RAM = 0x20000000 + 0x20000 ; /* 128K bytes */
   __base_SRAM_ITC = 0x0  ; /* SRAM_ITC */  
   __base_RAM2 = 0x0 ; /* RAM2 */  
-  __top_SRAM_ITC = 0x0 + 0x20000 ; /* 128K bytes */  
-  __top_RAM2 = 0x0 + 0x20000 ; /* 128K bytes */  
+  __top_SRAM_ITC = 0x0 + 0x20000 ; /* 128K bytes */
+  __top_RAM2 = 0x0 + 0x20000 ; /* 128K bytes */
   __base_SRAM_OC = 0x20200000  ; /* SRAM_OC */  
   __base_RAM3 = 0x20200000 ; /* RAM3 */  
   __top_SRAM_OC = 0x20200000 + 0x40000 ; /* 256K bytes */
@@ -123,10 +123,24 @@ ExternalFlash:  (BOARD_FLASH)
 
     } > BOARD_FLASH
 
+
+/*---------------------------------------------------------------------------------
+Exclude flash_QuadSpi.o & fsl_flexspi.o from the Code in the BOARD_FLASH
+ References:
+ MCUXpresso_IDE_User_Guide.pdf: 18.15.1 Relocating code from FLASH to RAM
+ https://mcuoneclipse.com/2014/10/06/putting-code-of-files-into-special-section-with-the-gnu-linker/
+---------------------------------------------------------------------------------*/
     .text : ALIGN(4)
     {
-       *(.text*)
-       *(.rodata .rodata.* .constdata .constdata.*)
+       /* *(.text*)  */
+       /* *(.rodata .rodata.* .constdata .constdata.*) */
+
+	   *(EXCLUDE_FILE(*flash_QuadSpi.o *fsl_flexspi.o) .text*)
+       *(EXCLUDE_FILE(*flash_QuadSpi.o *fsl_flexspi.o) .rodata)
+       *(EXCLUDE_FILE(*flash_QuadSpi.o *fsl_flexspi.o) .rodata.*)
+       *(EXCLUDE_FILE(*flash_QuadSpi.o *fsl_flexspi.o) .constdata)
+       *(EXCLUDE_FILE(*flash_QuadSpi.o *fsl_flexspi.o) .constdata.*)
+
        . = ALIGN(4);
     } > BOARD_FLASH
     /*
@@ -157,6 +171,13 @@ InstructionTightCoupledMemory:  (SRAM_ITC)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM2 = .) ;
+
+		*flash_QuadSpi.o (.text*)
+		*flash_QuadSpi.o (.rodata .rodata.* .constdata .constdata.*)
+
+		*fsl_flexspi.o (.text*)
+		*fsl_flexspi.o (.rodata .rodata.* .constdata .constdata.*)
+
         *(.ramfunc.$RAM2)
         *(.ramfunc.$SRAM_ITC)
         *(.data.$RAM2)
@@ -336,7 +357,7 @@ NOINIT in all memo Sections
 /*---------------------------------------------------------------------------------
 Heap
 ---------------------------------------------------------------------------------*/
-    /* Reserve and place Heap within memory map  70k */
+    /* Reserve and place Heap within memory map  70k | 366k */
     _HeapSize = 70 * 1024;
     .heap :  ALIGN(4)
     {

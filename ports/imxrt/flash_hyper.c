@@ -10,7 +10,6 @@
 #include "clock_config.h"
 #include "fsl_common.h"
 #include "flegftl_cfg.h"
-#include "overlay_manager.h"
 
 /*******************************************************************************
 * Definitions

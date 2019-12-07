@@ -32,6 +32,8 @@
  */
 
 #include "fsl_flexspi_nor_boot.h"
+#include "mpconfigboard.h"
+#if MICROPY_HW_HAS_QSPI_FLASH == 1
 
 #if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
 #if defined(__CC_ARM) || defined(__GNUC__)
@@ -69,4 +71,4 @@ const BOOT_DATA_T boot_data = {
 };
 #endif
 
-
+#endif //MICROPY_HW_HAS_QSPI_FLASH

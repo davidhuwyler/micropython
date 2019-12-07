@@ -45,6 +45,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "fsl_common.h"
+#include "mpconfigboard.h"
+#if MICROPY_HW_HAS_QSPI_FLASH == 1
 
 /* FLEXSPI memory config block related defintions */
 #define FLEXSPI_CFG_BLK_TAG (0x42464346UL)     // ascii "FCFB" Big Endian
@@ -294,3 +296,4 @@ extern "C" {
 }
 #endif
 #endif /* __EVKMIMXRT1020_FLEXSPI_NOR_CONFIG__ */
+#endif //MICROPY_HW_HAS_QSPI_FLASH

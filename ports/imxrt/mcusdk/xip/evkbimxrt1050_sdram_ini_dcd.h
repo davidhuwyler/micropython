@@ -35,6 +35,8 @@
 #define __EVKBIMXRT1050_DCD_SDRAM_INIT__
 
 #include <stdint.h>
+#include "mpconfigboard.h"
+#if MICROPY_HW_HAS_QSPI_FLASH == 1
 
 /*************************************
  *  DCD Data
@@ -45,3 +47,4 @@
 #define DCD_ARRAY_SIZE 1
 
 #endif /* __EVKBIMXRT1050_DCD_SDRAM_INIT__ */
+#endif //MICROPY_HW_HAS_QSPI_FLASH

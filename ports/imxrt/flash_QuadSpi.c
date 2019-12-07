@@ -10,6 +10,7 @@
 
 #if MICROPY_HW_HAS_QSPI_FLASH
  
+#include "flash.h"
 #include "fsl_flexspi.h"
 #include "fsl_debug_console.h"
 #include "fsl_cache.h"
@@ -213,7 +214,7 @@ status_t flexspi_nor_enable_quad_mode(FLEXSPI_Type *base)
     return status;
 }
 
-status_t flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address)
+int flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address)
 {
     status_t status;
     flexspi_transfer_t flashXfer;
@@ -252,7 +253,7 @@ status_t flexspi_nor_flash_erase_sector(FLEXSPI_Type *base, uint32_t address)
     return status;
 }
 
-status_t flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t dstAddr, const uint32_t *src)
+int flexspi_nor_flash_page_program(FLEXSPI_Type *base, uint32_t dstAddr, const uint32_t *src)
 {
     status_t status;
     flexspi_transfer_t flashXfer;
