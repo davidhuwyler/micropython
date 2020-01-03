@@ -8,16 +8,11 @@
 #include "genhdr/pins.h"
 #include "fsl_iomuxc.h"
 
-#if 0
-
 #define PULSE_TO_DUTY(x) ((x)*10*100*1.0/20000)
 
-pyb_servo_obj_t pyb_servo_obj[5]={
-	{.base = {&pyb_servo_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_0, .IRQn = TMR2_IRQn,  .isActive=false, .freq = 50, .inverted = 0, .angle = 0, 0.0f},
-	{.base = {&pyb_servo_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_1, .IRQn = TMR2_IRQn,  .isActive=false, .freq = 50, .inverted = 0, .angle = 0, 0.0f},
-	{.base = {&pyb_servo_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_3, .IRQn = TMR2_IRQn,  .isActive=false, .freq = 50, .inverted = 0, .angle = 0, 0.0f},
+pyb_servo_obj_t pyb_servo_obj[2]={
 	{.base = {&pyb_servo_type}, .tmr_base = TMR1, .idex = kQTMR_Channel_3, .IRQn = TMR1_IRQn,  .isActive=false, .freq = 50, .inverted = 0, .angle = 0, 0.0f},
-	{.base = {&pyb_servo_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_2, .IRQn = TMR2_IRQn,  .isActive=false, .freq = 50, .inverted = 0, .angle = 0, 0.0f},
+	{.base = {&pyb_servo_type}, .tmr_base = TMR2, .idex = kQTMR_Channel_3, .IRQn = TMR2_IRQn,  .isActive=false, .freq = 50, .inverted = 0, .angle = 0, 0.0f},
 };
 
 void ServoUpdateQTmrHiLow(pyb_servo_obj_t *pObj)
@@ -104,8 +99,6 @@ void servo_timer_irq_callback(void) {
 			QTMR_DisableInterrupts(s->tmr_base, s->idex, kQTMR_Compare2InterruptEnable);
 		}
     }
-
-		
 }
 
 void init_servo_config(servo_config_obj_t *p)
@@ -218,7 +211,6 @@ void init_servo(pyb_servo_obj_t *s)
 	ServoCalcQTmrParams(&s->servo_obj);
 	NVIC_SetPriority(s->IRQn, 15);
     EnableIRQ(s->IRQn);
-	// QTMR_EnableInterrupts(s->tmr_base, s->idex, kQTMR_Compare2InterruptEnable);
 	qtmrConfig.primarySource = kQTMR_ClockDivide_1 + s->prescale; //if use 8, the compare value is too large that bigger than 16bits register
 	QTMR_Init(s->tmr_base, s->idex, &qtmrConfig);
 }
@@ -237,24 +229,6 @@ void servo_init0()
 	pyb_servo_obj[1].pin = 0;
 	#else
 	SERVO_INIT_PINS(1);
-	#endif
-
-	#if !defined(MICROPY_HW_SERVO2_NAME)
-	pyb_servo_obj[2].pin = 0;
-	#else
-	SERVO_INIT_PINS(2);
-	#endif
-
-	#if !defined(MICROPY_HW_SERVO3_NAME)
-	pyb_servo_obj[3].pin = 0;
-	#else
-	SERVO_INIT_PINS(3);
-	#endif
-	
-	#if !defined(MICROPY_HW_SERVO4_NAME)
-	pyb_servo_obj[4].pin = 0;
-	#else
-	SERVO_INIT_PINS(4);
 	#endif
 }
 
@@ -292,9 +266,9 @@ STATIC mp_obj_t pyb_servo_make_new(const mp_obj_type_t *type, size_t n_args, siz
 
     // work out pwm channel
     int servo_id = mp_obj_get_int(args[0]);
-	if((servo_id < 1) || (servo_id>5))
-		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 1-5 %%>_<%% "));
-	pyb_servo_obj_t *s = &pyb_servo_obj[servo_id-1];
+	if((servo_id < 0) || (servo_id>1))
+		nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "only support 0-1 %%>_<%% "));
+	pyb_servo_obj_t *s = &pyb_servo_obj[servo_id];
 	s->isActive = true;
         // start the peripheral
     
@@ -522,5 +496,3 @@ const mp_obj_type_t pyb_servo_type = {
 	.make_new = pyb_servo_make_new,
     .locals_dict = (mp_obj_dict_t*)&servo_locals_dict,
 };
-
-#endif // 0

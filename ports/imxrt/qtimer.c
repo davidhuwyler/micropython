@@ -38,8 +38,8 @@ void QTmrIRQHandler(int min, int max)
 		}
 	}
 }
-//TODO Dave: Reenable the servo callback after servo works
-//extern void servo_timer_irq_callback();
+
+extern void servo_timer_irq_callback();
 void QTmrCommonIrqHandler(int moduleNdx)
 {
 	int min_index, max_index;
@@ -48,12 +48,10 @@ void QTmrCommonIrqHandler(int moduleNdx)
 		case 1:
 			min_index=0; max_index=3;
 			QTmrIRQHandler(min_index,max_index);
-			//TODO Dave: Reenable the servo callback after servo works
-			//servo_timer_irq_callback();
+			servo_timer_irq_callback();
 			break;
 		case 2:
-			//TODO Dave: Reenable the servo callback after servo works
-			//servo_timer_irq_callback();
+			servo_timer_irq_callback();
 			break;
 		case 3:
 			min_index=3; max_index=7;

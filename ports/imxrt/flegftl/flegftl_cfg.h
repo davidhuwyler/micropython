@@ -6,12 +6,12 @@
 // >>> user configurable maximum supported flash device
 
 #define FLEG_EU_SIZE			(256*1024) // (256*1024) size of Erase Unit (EU)
-#define FLEG_EU_CNT				22// 16
+#define FLEG_EU_CNT				220// 16
 
 #define FLEG_LPU_PER_EU			450U //465		// Logic Page Unit per Erase Unit, should hide some for better write access performance
 #define FLEG_ADDR0				0
 #define FLEG_WB_THRESHOLD		100		// wear balance threshold
-#define FLEG_FLASH_OFFSET		0x00300000
+#define FLEG_FLASH_OFFSET		0x00800000
 // <<<
 
 // >>> below configurations are calcuated based on basic configs, user must calculate correctly!

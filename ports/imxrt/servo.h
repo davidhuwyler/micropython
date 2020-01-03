@@ -1,29 +1,18 @@
 #include "py/obj.h"
 #include "fsl_qtmr.h"
 
-//TODO Dave: debug servo
-#if 0
-
 //based on qtimer
 #define MICROPY_HW_SERVO0_NAME 'servo0'
-#define MICROPY_HW_SERVO_0 pin_EMC_19
+#define MICROPY_HW_SERVO_0 pin_B1_08
 #define MICROPY_HW_SERVO1_NAME 'servo1'
-#define MICROPY_HW_SERVO_1 pin_EMC_20
-#define MICROPY_HW_SERVO2_NAME 'servo2'
-#define MICROPY_HW_SERVO_2 pin_B1_09
-#define MICROPY_HW_SERVO3_NAME 'servo3'
-#define MICROPY_HW_SERVO_3 pin_B1_08
-#define MICROPY_HW_SERVO_NAME 'servo4'
-#define MICROPY_HW_SERVO_4 pin_EMC_21
+#define MICROPY_HW_SERVO_1 pin_B1_09
 
-#define SERVO_NUM  (4)
+
+#define SERVO_NUM  (2)
 
 typedef enum {
-	PYB_SERVO_0 = 0, // index 0 is not exist on RT10xx!
+	PYB_SERVO_0 = 0,
     PYB_SERVO_1 = 1,
-    PYB_SERVO_2 = 2,
-    PYB_SERVO_3 = 3,
-	PYB_SERVO_4 = 4,
 } pyb_servo_t;
 
 typedef struct _servo_config_obj_t {
@@ -80,5 +69,3 @@ typedef struct _servo_obj_t{
 void servo_init0();
 extern const mp_obj_type_t pyb_servo_type;
 MP_DECLARE_CONST_FUN_OBJ_2(pyb_servo_set_obj);
-
-#endif //0

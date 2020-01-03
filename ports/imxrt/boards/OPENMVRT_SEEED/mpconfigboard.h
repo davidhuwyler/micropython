@@ -2,17 +2,18 @@
 #define MICROPY_HW_MCU_NAME         "i.MX RT1052"
 #define MICROPY_HW_UART_REPL    	(repl_uart_id)	// uart ID of REPL uart, must be the same as repl_uart_id in uart.h
 #define MICROPY_HW_HAS_SWITCH       (1)
-#define MICROPY_HW_HAS_FLASH        (0) //FlashFileSystem
+#define MICROPY_HW_HAS_FLASH        (0)
 #define MICROPY_HW_HAS_SDCARD       (1)
 #define MICROPY_HW_HAS_LCD          (0)
 #define MICROPY_HW_ENABLE_RNG       (1)
 #define MICROPY_HW_ENABLE_RTC       (1)
 #define MICROPY_HW_ENABLE_CTMR      (0)
-#define MICROPY_HW_ENABLE_SERVO     (0)
+#define MICROPY_HW_ENABLE_SERVO     (1)
 #define MICROPY_HW_ENABLE_DAC       (0)
 #define MICROPY_HW_ENABLE_CAN       (0)
 #define MICROPY_MW_ENABLE_SWIM		(0)
 
+#define MICROPY_HW_HAS_FLASH_FS     (0) //FlashFileSystem
 #define MICROPY_HW_HAS_QSPI_FLASH	(1)
 #define MICROPY_HW_HAS_HYPER_FLASH	(0)
 
