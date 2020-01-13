@@ -628,41 +628,51 @@ extern unsigned int __bss_section_table_end;
 // Sets up a simple runtime environment and initializes the C/C++
 // library.
 //*****************************************************************************
-__attribute__ ((section(".after_vectors.reset")))
-void ResetISR(void) {
+__attribute__ ((section(".after_vectors.reset"))) __attribute__ ((naked)) void ResetISR(void)
+{
+	__asm volatile
+	(
+		    //Reconfigures the FLEXRAM:
+		    //-->ITCM: 32k   (1  bank  x 32k)
+		    //-->DTCM: 416k  (13 banks x 32k)
+		    //-->OC:   64k   (2  banks x 32k) (min. 64k)
+		    //
+		    //Information about FLEXRAM Config:
+		    // IMXRT1050RM.pdf p.340...
+		    // AN12077 Using the i.MX RT FlexRAM.pdf
+		    // https://community.nxp.com/thread/517877
+	        "ldr          r0,   = 0x400AC038      			\n" // IOMUXC.GPR14
+	        "ldr          r1,   = 10 | 10<<4		  	 	\n" // config (max allowed) ITCM=512KB, DTCM=512KB
+	        "ldr          r2,   [r0]				  		\n"
+	        "bfi          r2,   r1, #16, #8		  			\n"
+	        "str          r2,   [r0] 			 			\n"
 
+		    //IOMUXC_GPR->GPR17 = 0x5EAAAAAA -->  64k OC, 32k ITCM, 416 DTCM
+		    //(2bits per 32k block, 0b01 = OC, 11 = ITCM, 10 = DTCM)
+		    //0x7AAAAAAA = 0b 01 01 11 10 10 10 10 10 10 10 10 10 10 10 10 10 --> 64k OC, 32k ITCM, 416 DTCM
+	        "ldr          r0, = 0x400AC044  				\n" //IOMUXC.GPR17"
+	        "ldr          r1, = 0x5EAAAAAA  				\n"
+	        "str          r1,   [r0] 						\n"
+
+		    // IOMUXC_GPR->GPR16 = 0b111 -> Activate DTCM, ITCM and choose config flexram through GPR17
+	        "ldr          r0,   = 0x400AC040       			\n" //IOMUXC.GPR16
+	        "ldr          r2,   [r0]						\n"
+	        "orr          r2, 	#7                          \n"
+	        "str          r2,   [r0]						\n"
+
+	        "ldr          r0, = 0x20000000					\n"
+	        "ldr          r1, = 0x20078000					\n"
+	        "ldr          r2, = 0							\n"
+
+		    "ldr   		  r0, = ResetISR_C					\n" //Jump to the default ResetISR in C
+		    "bx    		  r0								\n"
+		);
+}
+
+__attribute__ ((section(".after_vectors.reset")))
+void ResetISR_C(void) {
     // Disable interrupts
     __asm volatile ("cpsid i");
-
-
-#if 0
-
-    //Reconfigures the FLEXRAM:
-    //-->ITCM: 32k   (1  bank  x 32k)
-    //-->DTCM: 416k  (13 banks x 32k)
-    //-->OC:   64k   (2  banks x 32k) (min. 64k)
-    //
-    //Information about FLEXRAM Config:
-    // IMXRT1050RM.pdf p.340...
-    // AN12077 Using the i.MX RT FlexRAM.pdf
-    // https://community.nxp.com/thread/517877
-
-    uint32_t volatile * const TCM_CTRL = (uint32_t volatile *) 0x400B0000;
-    *(TCM_CTRL) &= 0xFFFFFFF8;
-    *(TCM_CTRL) |= 0x4;
-
-    IOMUXC_GPR->GPR17 = 0x5EAAAAAA; // 64k OC, 32k ITCM, 416 DTCM
-    //(2bits per 32k block, 0b01 = OC, 11 = ITCM, 10 = DTCM)
-    //0x7AAAAAAA = 0b 01 01 11 10 10 10 10 10 10 10 10 10 10 10 10 10 --> 64k OC, 32k ITCM, 416 DTCM
-
-    IOMUXC_GPR->GPR16 |= 0x7; ///0b111 -> Activate DTCM, ITCM and choose config flexram through GPR17
-
-    //Set the Max. Possible values of ITCM & DTCM
-    IOMUXC_GPR->GPR14 |= (0xA <<20);
-    IOMUXC_GPR->GPR14 |= (0xA <<16);
-
-#endif
-
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code
