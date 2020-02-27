@@ -55,6 +55,9 @@ extern "C" {
  */
 void BOARD_InitPins(void);
 
+void LPSPI4_InitPins(void);
+void LPSPI4_DeinitPins(void);
+
 #if defined(__cplusplus)
 }
 #endif

@@ -358,7 +358,7 @@ NOINIT in all memo Sections
 Heap
 ---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map  70k | 366k */
-    _HeapSize = 366 * 1024;
+    _HeapSize = 300 * 1024;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;
@@ -433,6 +433,26 @@ OpenMV (Framebuffer...
   {
 	*.o (.jpeg_tab)
   } > SRAM_DTC */
+
+
+    /* Lepton FrameBuffer*/
+    _VoSPIsize = 64*1024;
+    .voSpiBuf :  ALIGN(4)
+    {
+        _vospi_bufStart = .;
+        . += _VoSPIsize;
+        . = ALIGN(4);
+    } > SRAM_DTC
+
+    /* LineBuffer*/
+    _LineBufSize = 3*1024;
+    .voSpiBuf :  ALIGN(4)
+    {
+        _Line_Buf_start = .;
+        . += _LineBufSize;
+        . = ALIGN(4);
+    } > SRAM_DTC
+
 }
 
   /*TODO Dave: Define proper variables... & Memomap*/
@@ -451,3 +471,6 @@ OpenMV (Framebuffer...
   _fb_base = _ld_main_fb;
   _jpeg_buf = _ld_jpeg_buf;
   _fballoc = _ld_fballoc;
+
+   _vospi_buf = _vospi_bufStart;
+   _line_buf = _Line_Buf_start;

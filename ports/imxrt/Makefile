@@ -268,7 +268,10 @@ SRC_UTIL = 	$(addprefix $(HAL_DIR)/utilities/, \
 SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_adc.c \
 	fsl_clock.c \
+	fsl_common.c \
 	fsl_cache.c \
+	fsl_dmamux.c \
+	fsl_iomuxc.c \
 	fsl_flexspi.c \
 	fsl_snvs_hp.c \
 	fsl_trng.c \
@@ -281,6 +284,10 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_csi.c \
 	fsl_lpi2c.c \
 	fsl_flexram.c \
+	fsl_edma.c \
+	fsl_lpspi_edma.c \
+	fsl_lpspi_cmsis.c \
+	fsl_dmamux.c \
 	)
 	
 SRC_HAL += $(addprefix $(HAL_DIR)/, \

@@ -91,11 +91,11 @@ pyb_spi_obj_t pyb_spi_obj[5] = {
 		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
     {{&pyb_spi_type}, LPSPI1, PYB_SPI_1, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux ,kCLOCK_LpspiDiv, LPSPI1_IRQn, 1000000, 
 		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
-    {{&pyb_spi_type}, LPSPI2, PYB_SPI_2, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI1_IRQn, 1000000,
+    {{&pyb_spi_type}, LPSPI2, PYB_SPI_2, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI2_IRQn, 1000000,
 		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
-    {{&pyb_spi_type}, LPSPI3, PYB_SPI_3, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI1_IRQn, 1000000, 
+    {{&pyb_spi_type}, LPSPI3, PYB_SPI_3, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI3_IRQn, 1000000, 
 		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
-    {{&pyb_spi_type}, LPSPI4, PYB_SPI_4, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI1_IRQn, 1000000, 
+    {{&pyb_spi_type}, LPSPI4, PYB_SPI_4, kCLOCK_Usb1PllPfd0Clk, kCLOCK_LpspiMux , kCLOCK_LpspiDiv,LPSPI4_IRQn, 1000000, 
 		0, 1, 1, 0, 0, 0, 0, {0}, {0}},
 };
 
