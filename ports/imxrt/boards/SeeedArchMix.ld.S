@@ -398,12 +398,10 @@ Stack
 /*---------------------------------------------------------------------------------
 OpenMV (Framebuffer...
 ---------------------------------------------------------------------------------*/
-  /*FrameBuffer BOARD_SDRAM*/
-  /*FB_SIZE  = 1000*1024;
-  FB_ALLOC_SIZE = 100*1024;*/
-
-  FB_SIZE  = 192*1024;
-  FB_ALLOC_SIZE = 32*1024;
+  /*Main & Lepton(VoSpi) FrameBuffer in BOARD_SDRAM*/
+  FB_SIZE  = 400*1024;
+  FB_ALLOC_SIZE = 100*1024;
+  _VoSPIsize = 64*1024;
   .frameBuffers :
   {
     . = ALIGN(8);
@@ -411,6 +409,9 @@ OpenMV (Framebuffer...
 	. += FB_SIZE + FB_ALLOC_SIZE;
 	/* fb_alloc is at the end of FB (with margin) */
 	_ld_fballoc = .;
+    _vospi_bufStart = .;
+    . += _VoSPIsize;
+    . = ALIGN(4);
   } > BOARD_SDRAM
 
   /*JPEG Framebuffer*/
@@ -435,14 +436,7 @@ OpenMV (Framebuffer...
   } > SRAM_DTC */
 
 
-    /* Lepton FrameBuffer*/
-    _VoSPIsize = 64*1024;
-    .voSpiBuf :  ALIGN(4)
-    {
-        _vospi_bufStart = .;
-        . += _VoSPIsize;
-        . = ALIGN(4);
-    } > SRAM_DTC
+
 
     /* LineBuffer*/
     _LineBufSize = 3*1024;

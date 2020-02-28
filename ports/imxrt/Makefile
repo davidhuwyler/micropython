@@ -286,7 +286,6 @@ SRC_HAL = $(addprefix $(HAL_DIR)/drivers/, \
 	fsl_flexram.c \
 	fsl_edma.c \
 	fsl_lpspi_edma.c \
-	fsl_lpspi_cmsis.c \
 	fsl_dmamux.c \
 	)
 	
