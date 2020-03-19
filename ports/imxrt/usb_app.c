@@ -26,15 +26,7 @@
 
 #include <stdarg.h>
 #include <string.h>
-/* >>> 
- * rocky: stmhal headers
-#include "usbd_core.h"
-#include "usbd_desc.h"
-#include "usbd_cdc_msc_hid.h"
-#include "usbd_cdc_interface.h"
-#include "usbd_msc_storage.h"
-#include "usbd_hid_interface.h"
-<<< */
+
 #include "usb_device_config.h"
 #include "usb.h"
 #include "usb_device.h"
@@ -54,17 +46,7 @@
 #include "usb_app.h"
 #include "composite.h"
 
-/*
-#if defined(USE_USB_FS)
-#define USB_PHY_ID  USB_PHY_FS_ID
-#elif defined(USE_USB_HS) && defined(USE_USB_HS_IN_FS)
-#define USB_PHY_ID  USB_PHY_HS_ID
-#else
-#error Unable to determine proper USB_PHY_ID to use
-#endif
-*/
 
-// this will be persistent across a soft-reset
 mp_uint_t pyb_usb_flags = 0;
 
 #ifdef USE_DEVICE_MODE
