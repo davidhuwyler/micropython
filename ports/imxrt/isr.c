@@ -184,12 +184,6 @@ void HardFault_C_Handler(ExceptionRegisters_t *regs, uint32_t *pXtraRegs, uint32
         NVIC_SystemReset();
     }
 
-	/* rocky ignore
-    // We need to disable the USB so it doesn't try to write data out on
-    // the VCP and then block indefinitely waiting for the buffer to drain.
-    pyb_usb_flags = 0;
-	*/
-
     mp_hal_stdout_tx_str("HardFault\r\n");
 
     print_reg("R0    ", regs->r0);
