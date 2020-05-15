@@ -358,7 +358,7 @@ NOINIT in all memo Sections
 Heap
 ---------------------------------------------------------------------------------*/
     /* Reserve and place Heap within memory map  70k | 366k */
-    _HeapSize = 364 * 1024;
+    _HeapSize = 350 * 1024;
     .heap :  ALIGN(4)
     {
         _pvHeapStart = .;

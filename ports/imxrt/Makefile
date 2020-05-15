@@ -69,7 +69,7 @@ INC += -Iusb_misc
 # Options for particular MCU series
 CFLAGS_CORTEX_M7 = -DCPU_MIMXRT1052CVL5B -DCPU_MIMXRT1052CVL5B_cm7 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -D__NEWLIB__ -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m7 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -D__NEWLIB__ -fstack-usage
 
-#CFLAGS += -O3 # Compiler Optimization
+CFLAGS += -O3 # Compiler Optimization
 
 CFLAGS += $(INC)
 CFLAGS += $(CFLAGS_CORTEX_M7)
